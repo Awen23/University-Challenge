@@ -6,7 +6,7 @@ class Overworld(BaseState):
         super(Overworld, self).__init__()
         self.title = self.font.render("This is the overworld!", True, pygame.Color("white"))
         self.title_rect = self.title.get_rect(center=self.screen_rect.center)
-        self.next_state = "MEAL DEAL MANIA"
+        self.next_state = "SHELF SEARCH"
         self.time_active = 0
 
     def update(self, dt):
