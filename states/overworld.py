@@ -5,7 +5,7 @@ class Overworld(BaseState):
     def __init__(self):
         super(Overworld, self).__init__()
         self.title = self.font.render("This is the overworld!", True, pygame.Color("white"))
-        self.title_rect = self.title.get_rect(center=self.screen_rect.center)
+        self.title_rect = self.title.get_rect(center=(640, 260))
         self.time_active = 0
         # Character
         self.character_rect = pygame.Rect((0,0), (50,50))
@@ -15,15 +15,20 @@ class Overworld(BaseState):
         self.initialise_locations()
     
     def initialise_locations(self):
-        print(self.screen_rect.center)
+        # Make this better..
         self.location_rects["MEAL DEAL MANIA"] = pygame.Rect((0,0), (50,50))
         self.location_rects["MEAL DEAL MANIA"].center = (740, 360)
+
+        self.location_rects["COURSEWORK CRUNCH"] = pygame.Rect((0,0), (50,50))
+        self.location_rects["COURSEWORK CRUNCH"].center = (540, 360)
+
+        self.location_rects["SHELF SEARCH"] = pygame.Rect((0,0), (50,50))
+        self.location_rects["SHELF SEARCH"].center = (640, 460)
 
 
     # Runs continuously, it's the loop
     def update(self, dt):
         self.time_active += dt
-        
         # if self.time_active >= 5000:
         #     self.done = True
 
@@ -36,9 +41,6 @@ class Overworld(BaseState):
             # Need to change next state here
             self.next_state = list(self.location_rects.keys())[intersect_index]
             self.done = True
-
-        
-        pass
 
     # Handles arrow keys for moving character
     # TODO: Allow diagonal movement
