@@ -1,96 +1,49 @@
-import pygame as pg
-import sys
-  
-class States(object):
-    def __init__(self):
-        self.done = False
-        self.next = None
-        self.quit = False
-        self.previous = None
-  
-class Menu(States):
-    def __init__(self):
-        States.__init__(self)
-        self.next = 'game'
-    def cleanup(self):
-        print('cleaning up Menu state stuff')
-    def startup(self):
-        print('starting Menu state stuff')
-    def get_event(self, event):
-        if event.type == pg.KEYDOWN:
-            print('Menu State keydown')
-        elif event.type == pg.MOUSEBUTTONDOWN:
-            self.done = True
-    def update(self, screen, dt):
-        self.draw(screen)
-    def draw(self, screen):
-        screen.fill((255,0,0))
-  
-class Game(States):
-    def __init__(self):
-        States.__init__(self)
-        self.next = 'menu'
-    def cleanup(self):
-        print('cleaning up Game state stuff')
-    def startup(self):
-        print('starting Game state stuff')
-    def get_event(self, event):
-        if event.type == pg.KEYDOWN:
-            print('Game State keydown')
-        elif event.type == pg.MOUSEBUTTONDOWN:
-            self.done = True
-    def update(self, screen, dt):
-        self.draw(screen)
-    def draw(self, screen):
-        screen.fill((0,0,255))
-  
-class Control:
-    def __init__(self, **settings):
-        self.__dict__.update(settings)
-        self.done = False
-        self.screen = pg.display.set_mode(self.size)
-        self.clock = pg.time.Clock()
-    def setup_states(self, state_dict, start_state):
-        self.state_dict = state_dict
+import pygame
+
+class Game(object):
+    def __init__(self, screen, states, start_state):
+        self.done = False # When true, the game will be over and will exit
+        self.screen = screen
+        self.clock = pygame.time.Clock()
+        self.fps = 60
+        self.states = states
         self.state_name = start_state
-        self.state = self.state_dict[self.state_name]
+        self.state = self.states[self.state_name]
+
+    def event_loop(self):
+        for event in pygame.event.get():
+            self.state.get_event(event)
+
+    # When state is done
+    # Handles transition to next state
     def flip_state(self):
+        current_state = self.state_name
+        next_state = self.state.next_state
         self.state.done = False
-        previous,self.state_name = self.state_name, self.state.next
-        self.state.cleanup()
-        self.state = self.state_dict[self.state_name]
-        self.state.startup()
-        self.state.previous = previous
+        self.state_name = next_state
+        persistent = self.state.persist # Passes along persistent values
+        self.state = self.states[self.state_name]
+        # Starts up next state
+        self.state.startup(persistent)
+
     def update(self, dt):
         if self.state.quit:
             self.done = True
         elif self.state.done:
             self.flip_state()
-        self.state.update(self.screen, dt)
-    def event_loop(self):
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                self.done = True
-            self.state.get_event(event)
-    def main_game_loop(self):
+        self.state.update(dt)
+    
+    def draw(self):
+        self.state.draw(self.screen)
+
+    def run(self):
+        # Main game loop
         while not self.done:
-            delta_time = self.clock.tick(self.fps)/1000.0
+            # Advance game time
+            dt = self.clock.tick(self.fps)
+            # Handle any events (key presses etc)
             self.event_loop()
-            self.update(delta_time)
-            pg.display.update()
-  
-  
-settings = {
-    'size':(600,400),
-    'fps' :60
-}
-  
-app = Control(**settings)
-state_dict = {
-    'menu': Menu(),
-    'game': Game()
-}
-app.setup_states(state_dict, 'menu')
-app.main_game_loop()
-pg.quit()
-sys.exit()
+            # Flip state
+            self.update(dt)
+            self.draw()
+            pygame.display.update()
