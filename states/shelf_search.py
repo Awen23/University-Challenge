@@ -44,9 +44,6 @@ class ShelfSearch(BaseState):
         if event.type == pygame.QUIT:
             self.quit = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            print("target=", self.target)
-            print("shelves[target[0]]=", self.shelves[self.target[0]])
-            print("shelves[target[0]][target[1]]=", self.shelves[self.target[0]][self.target[1]])
             if self.shelves[self.target[0]][self.target[1]].is_clicked():
                 self.score += 1
                 self.target = self.generate_target()
