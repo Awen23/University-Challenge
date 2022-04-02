@@ -6,7 +6,6 @@ class Overworld(BaseState):
         super(Overworld, self).__init__()
         self.title = self.font.render("This is the overworld!", True, pygame.Color("white"))
         self.title_rect = self.title.get_rect(center=self.screen_rect.center)
-        self.next_state = "MEAL DEAL MANIA"
         self.time_active = 0
         # Character
         self.character_rect = pygame.Rect((0,0), (50,50))
@@ -31,8 +30,12 @@ class Overworld(BaseState):
         # Move character
         self.handle_keys(self.character_rect)
         # Maybe use pygame.Rect.collidedict instead...
-        if self.character_rect.collidelist(list(self.location_rects.values())) == 0:
-            print("intersecc")
+        intersect_index = self.character_rect.collidelist(list(self.location_rects.values()))
+        # If != -1, we have intersected
+        if intersect_index != -1:
+            # Need to change next state here
+            self.next_state = list(self.location_rects.keys())[intersect_index]
+            self.done = True
 
         
         pass
