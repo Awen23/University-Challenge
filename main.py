@@ -26,9 +26,10 @@ states = {
     "DUCK DUCK REVOLUTION": DuckDuckRevolution(),
     "DUCK DUCK REVOLUTION GAME START": GameStart("Duck Duck Revolution!", "student_union/student_union_blurred.png", "states/data/busboi.png", "states/data/duck_duck_revolution.txt", "DUCK DUCK REVOLUTION"),
     "TICKETS THANKS": TicketsThanks(),
-    "TICKETS THANKS GAME START": GameStart("Tickets Thanks!", "states/data/bus_stop.png", "states/data/busboi.png", "states/data/tickets_thanks.txt", "TICKETS THANKS")
+    "TICKETS THANKS GAME START": GameStart("Tickets Thanks!", "states/data/bus_stop.png", "states/data/busboi.png", "states/data/tickets_thanks.txt", "TICKETS THANKS"),
+    "COURSEWORK CRUNCH GAME START": GameStart("Coursework Crunch!", "states/data/1w.png", "states/data/busboi.png", "states/data/coursework_crash.txt", "COURSEWORK CRUNCH")
 }
 
 # game = Game(screen, states, "MAIN MENU")
-game = Game(screen, states, "DUCK DUCK REVOLUTION")
+game = Game(screen, states, "OVERWORLD")
 game.run()

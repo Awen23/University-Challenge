@@ -18,8 +18,8 @@ class GameEnd(BaseState):
         self.instruction_box = pygame.Surface((840,640), pygame.SRCALPHA)   # per-pixel alpha
         self.instruction_box.fill((0,0,0,128))  # notice the alpha value in the color
 
-        self.start_button = pygame.image.load("states/data/start_button.png")
-        self.start_button_over = pygame.image.load("states/data/start_button_highlighted.png")
+        self.start_button = pygame.image.load("states/data/next_button.png")
+        self.start_button_over = pygame.image.load("states/data/next_button_highlighted.png")
         self.button_box = pygame.Rect(715,500,210,90)
 
     def get_event(self, event):

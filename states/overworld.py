@@ -33,7 +33,7 @@ class Overworld(BaseState):
         mdm = pygame.transform.scale(pygame.image.load("./fresh_facade.png"), (120, 120))
         self.locations["MEAL DEAL MANIA GAME START"] = (mdm, mdm.get_rect(center=(260,560)))
 
-        ss =  pygame.transform.scale(pygame.image.load("./library_facade.png"), (120, 120))
+        ss =  pygame.transform.scale(pygame.image.load("states/data/library.png"), (120, 120))
         self.locations["SHELF SEARCH"] = (ss, ss.get_rect(center=(940, 320)))
 
         ddr = pygame.transform.scale(pygame.image.load("./su_facade.png"), (120, 120))
@@ -89,4 +89,3 @@ class Overworld(BaseState):
         for loc in self.locations.values():
             surface.blit(loc[0], loc[1])
             #pygame.draw.rect(surface, pygame.Color("red"), loc_rect)
-    

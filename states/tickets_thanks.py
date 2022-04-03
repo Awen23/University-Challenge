@@ -3,17 +3,7 @@ from .base import BaseState
 import random
 import time
 
-def obscure(pic, color):
-    if len(color) != 4:
-        raise ValueError("image.obscure needs an rgba, not just an rgb")
-    r, g, b, a = color
-
-    overlay = pygame.Surface(pic.get_size())
-    overlay.fill((r, g, b))
-    overlay.set_alpha(a)
-
-    pic.blit(overlay, (0, 0))
-    return pic
+pygame.mixer.init()
 
 class TicketsThanks(BaseState):
     def __init__(self):
@@ -21,7 +11,9 @@ class TicketsThanks(BaseState):
         self.title = self.font.render("TicketsThanks", True, pygame.Color("white"))
         self.title_rect = self.title.get_rect(center=self.screen_rect.center)
         self.next_state = "OVERWORLD"
-        self.start_time = time.time()
+        self.start_time = False
+        self.ambience = pygame.mixer.music.load("states/data/bus_ambient.mp3")
+
 
         self.words = ["cord", "lord", "tree", "fear", "plea", "cold", "door", "west", "read", "reed", "boot", "soot", "noot", "wear", "tear", 
                         "rear", "free", "feed", "root", "join", "pain", "rats", "wire"]
@@ -49,6 +41,14 @@ class TicketsThanks(BaseState):
         self.score_rect = pygame.Rect(460, 7, 50, 30)
         self.time_rect = pygame.Rect(660, 7, 50, 30)
 
+        self.score_final = pygame.Surface((680,420), pygame.SRCALPHA)   # per-pixel alpha
+        self.score_final.fill((0,0,0,200))
+        #self.score_final = pygame.Rect(300,150,680,420)
+        self.button_box = pygame.Rect(535,400,210,90)
+        self.next_button = pygame.image.load("states/data/nextbutton.png")
+        self.next_button_over = pygame.image.load("states/data/nextbutton_highlighted.png")
+        self.ending = False
+
         self.word_box = pygame.Rect(325, 60, 300, 50)
         self.time_box = pygame.Rect(655, 60, 300, 50)
 
@@ -67,31 +67,46 @@ class TicketsThanks(BaseState):
         if event.type == pygame.QUIT:
             self.quit = True
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.yes_button.collidepoint(event.pos):
-                if self.words[self.word_index] == self.current_word or self.times[self.time_index] == self.current_word:
-                    self.score += 1
-                else:
-                    self.score -= 1
-                self.remove_ticket = True
-                self.word_changed = False
 
-            if self.no_button.collidepoint(event.pos):
-                if self.words[self.word_index] != self.current_word or self.times[self.time_index] != self.current_word:
-                    self.score += 1
-                else:
-                    self.score -= 1
-                self.remove_ticket = True
-                self.word_changed = False
+        if not self.ending:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.yes_button.collidepoint(event.pos):
+                    if self.words[self.word_index] == self.current_word or self.times[self.time_index] == self.current_word:
+                        self.score += 1
+                    else:
+                        self.score -= 1
+                    self.remove_ticket = True
+                    self.word_changed = False
+
+                if self.no_button.collidepoint(event.pos):
+                    if self.words[self.word_index] != self.current_word or self.times[self.time_index] != self.current_word:
+                        self.score += 1
+                    else:
+                        self.score -= 1
+                    self.remove_ticket = True
+                    self.word_changed = False
+        else:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.button_box.collidepoint(event.pos):
+                    print("DONE")
+                    self.done = True
     
     def draw(self, surface):
+        if not self.start_time:
+            self.start_time = time.time()
+            pygame.mixer.music.set_volume(0.7)
+            pygame.mixer.music.play()
+        else:
+            if (time.time() - self.start_time) > 30:
+                self.ending = True
+
         surface.blit(self.bg, (0, 0))
 
         text_surface = self.my_font.render("Score: " + str(self.score), True, pygame.Color("white"))
         surface.blit(text_surface, (self.score_rect.x, self.score_rect.y))
 
-        text_surface = self.my_font.render("Time: " + str(30 - round((self.start_time - time.time()))), True, pygame.Color("white"))
-        surface.blit(text_surface, (self.time_rect.x, self.score_rect.y))
+        text_surface = self.my_font.render("Time: " + str(30 - round(time.time() - self.start_time)), True, pygame.Color("white"))
+        surface.blit(text_surface, (self.time_rect.x, self.time_rect.y))
 
         pygame.draw.rect(surface, (180,180,0), self.word_box)
         text_surface = self.my_big_font.render("Word: "  + self.words[self.word_index], True, pygame.Color("white"))
@@ -168,5 +183,27 @@ class TicketsThanks(BaseState):
             surface.blit(self.no_over, self.no_over.get_rect(center = self.no_button.center))
         else:
             surface.blit(self.no_pic, self.no_pic.get_rect(center = self.no_button.center))
+
+        if self.ending:
+            #pygame.draw.rect(surface, (0,0,0), self.score_final)
+            surface.blit(self.score_final, (300, 150))
+            text_surface = self.my_big_font.render("Score: " + str(self.score), True, (255,255,255))
+            size = self.my_big_font.size("Score: " + str(self.score))
+            surface.blit(text_surface, (640-round(size[0]/2), 250))
+
+            b_len_x = 210
+            b_len_y = 90
+            mos_x, mos_y = pygame.mouse.get_pos()
+            if mos_x>self.button_box.x and (mos_x<self.button_box.x+b_len_x):
+                x_inside = True
+            else: x_inside = False
+            if mos_y>self.button_box.y and (mos_y<self.button_box.y+b_len_y):
+                y_inside = True
+            else: y_inside = False
+            if x_inside and y_inside:
+                #Mouse is hovering over button
+                surface.blit(self.next_button_over, self.next_button_over.get_rect(center = self.button_box.center))
+            else:
+                surface.blit(self.next_button, self.next_button.get_rect(center = self.button_box.center))
 
         
