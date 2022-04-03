@@ -66,7 +66,7 @@ class DuckDuckRevolution(BaseState):
         self.font = pygame.font.SysFont('serif.ttf', 50)
         self.counter = 0
         self.score = 0
-        self.keys_counter = 0
+        self.keys_counter = 1
         self.title = self.font.render(
             "Viva la duck duck revolution", True, pygame.Color("white"))
         self.title_rect = self.title.get_rect(center=(300, 50))
@@ -126,16 +126,23 @@ class DuckDuckRevolution(BaseState):
             x.update_x()
         self.arrow_queue = list(filter(lambda x: x.centre_x < 1400 and not(x.checked), self.arrow_queue))
         blocks_hit_list = pygame.sprite.spritecollide(self.strike_line, self.arrow_queue, False)
+        if len(blocks_hit_list) > 0:
+            print(blocks_hit_list)
+        print(self.keys_counter)
         if self.keys_counter == 1:
             for arrow in blocks_hit_list:
                 if not(arrow.checked):
-                    arrow.checked = True
+                    print(self.score)
                     if arrow.direction == Direction.LEFT and self.left_arrow_currently_down:
+                        arrow.checked = True
                         self.score += 1
                     if arrow.direction == Direction.RIGHT and self.right_arrow_currently_down:
+                        arrow.checked = True
                         self.score += 1
                     if arrow.direction == Direction.UP and self.up_arrow_currently_down:
+                        arrow.checked = True
                         self.score += 1
                     if arrow.direction == Direction.DOWN and self.down_arrow_currently_down:
+                        arrow.checked = True
                         self.score += 1
                                 
