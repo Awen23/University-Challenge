@@ -110,6 +110,9 @@ class DuckDuckRevolution(BaseState):
             self.quit = True
         if not self.ending:
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.__init__()
+                    self.done = True
                 if event.key == pygame.K_UP:
                     self.up_arrow_currently_down = True
                     self.keys_counter += 1
@@ -148,7 +151,7 @@ class DuckDuckRevolution(BaseState):
             pygame.mixer.music.set_volume(0.7)
             pygame.mixer.music.play()
         else:
-            if (time.time() - self.start_time) > 5:
+            if (time.time() - self.start_time) > 30:
                 pygame.mixer.music.fadeout(1000)
                 self.ending = True
 

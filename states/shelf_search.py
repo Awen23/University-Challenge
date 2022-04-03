@@ -70,6 +70,10 @@ class ShelfSearch(BaseState):
         if event.type == pygame.QUIT:
             self.quit = True
         if not self.ending:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.__init__()
+                    self.done = True
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.shelves[self.target[0]][self.target[1]].is_clicked():
                     self.score += 1
@@ -87,7 +91,7 @@ class ShelfSearch(BaseState):
             pygame.mixer.music.set_volume(0.7)
             pygame.mixer.music.play()
         else:
-            if (time.time() - self.start_time) > 5:
+            if (time.time() - self.start_time) > 30:
                 self.ending = True
 
         surface.blit(self.bg, (0, 0))

@@ -67,6 +67,10 @@ class TicketsThanks(BaseState):
             self.quit = True
 
         if not self.ending:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.__init__()
+                    self.done = True
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.yes_button.collidepoint(event.pos):
                     if self.words[self.word_index] == self.current_word or self.times[self.time_index] == self.current_word:
