@@ -32,7 +32,7 @@ class Overworld(BaseState):
         self.locations["MEAL DEAL MANIA GAME START"] = (mdm, mdm.get_rect(center=(260,500)))
 
         ss =  pygame.transform.scale(pygame.image.load("states/data/library.png"), (120, 120))
-        self.locations["SHELF SEARCH"] = (ss, ss.get_rect(center=(940, 320)))
+        self.locations["SHELF SEARCH GAME START"] = (ss, ss.get_rect(center=(940, 320)))
 
         ddr = pygame.transform.scale(pygame.image.load("./su_facade.png"), (120, 120))
         self.locations["DUCK DUCK REVOLUTION GAME START"] = (ddr, ddr.get_rect(center=(1060, 440)))
