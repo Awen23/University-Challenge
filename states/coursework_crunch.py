@@ -70,7 +70,7 @@ class CourseworkCrunch(BaseState):
                 if self.run_button.collidepoint(event.pos):
                     self.errored = True
                     self.last_question = self.current_question
-                    self.random_index = random.randint(0, len(self.questions))
+                    self.random_index = random.randint(0, len(self.questions) - 1)
                     self.current_question = self.questions[self.random_index]
                     user_list = list(filter(None, re.split("[ \[\]\(\)|']", self.user_text)))
                     code_list = list(filter(None, re.split("[ \[\]\(\)|']", self.current_snippet)))
