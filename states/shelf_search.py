@@ -59,6 +59,9 @@ class ShelfSearch(BaseState):
         self.next_button_over = pygame.image.load("states/data/nextbutton_highlighted.png")
         self.ending = False
 
+    def startup(self, persistent):
+        self.ending = False
+
     def generate_target(self):
         x = random.randint(0, len(self.shelves) - 1)
         y = random.randint(0, len(self.shelves[x]) - 1)
@@ -67,6 +70,10 @@ class ShelfSearch(BaseState):
         if event.type == pygame.QUIT:
             self.quit = True
         if not self.ending:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.__init__()
+                    self.done = True
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.shelves[self.target[0]][self.target[1]].is_clicked():
                     self.score += 1
@@ -75,6 +82,7 @@ class ShelfSearch(BaseState):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.button_box.collidepoint(event.pos):
                     print("DONE")
+                    self.__init__()
                     self.done = True
     def draw(self, surface):
         if not self.start_time:
@@ -128,6 +136,7 @@ class ShelfSearch(BaseState):
                 surface.blit(self.next_button_over, self.next_button_over.get_rect(center = self.button_box.center))
             else:
                 surface.blit(self.next_button, self.next_button.get_rect(center = self.button_box.center))
+            
                 
     def update(self, dt):
         return super().update(dt)

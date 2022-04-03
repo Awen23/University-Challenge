@@ -60,6 +60,10 @@ class CourseworkCrunch(BaseState):
         if event.type == pygame.QUIT:
             self.quit = True
         if not self.ending:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.__init__()
+                    self.done = True
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.run_button.collidepoint(event.pos):
                     self.errored = True
@@ -104,6 +108,7 @@ class CourseworkCrunch(BaseState):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.button_box.collidepoint(event.pos):
                     print("DONE")
+                    self.__init__()
                     self.done = True
     
     def draw(self, surface):

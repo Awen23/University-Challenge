@@ -13,7 +13,7 @@ from states.main_menu import MainMenu
 from game import Game
 
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((1280, 720), pygame.FULLSCREEN)
 states = {
     "MAIN MENU": MainMenu(),
     "OVERWORLD": Overworld(),
@@ -31,6 +31,6 @@ states = {
     "COURSEWORK CRUNCH GAME START": GameStart("Coursework Crunch!", "states/data/1w.png", "states/data/busboi.png", "states/data/coursework_crash.txt", "COURSEWORK CRUNCH")
 }
 
-# game = Game(screen, states, "MAIN MENU")
-game = Game(screen, states, "OVERWORLD")
-game.run()
+game = Game(screen, states, "MAIN MENU")
+#game = Game(screen, states, "OVERWORLD")
+game.run()  

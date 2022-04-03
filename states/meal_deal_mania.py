@@ -158,6 +158,10 @@ class MealDealMania(BaseState):
             self.quit = True
         
         if not self.ending:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.__init__()
+                    self.done = True
             if event.type == pygame.MOUSEMOTION:
                 mouse_pos = pygame.mouse.get_pos()
                 moused_prods = [p for s in self.products for p in s if p.rect.collidepoint(mouse_pos)]
@@ -199,6 +203,7 @@ class MealDealMania(BaseState):
         else:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.button_box.collidepoint(event.pos):
+                    self.__init__()
                     self.done = True
 
 
