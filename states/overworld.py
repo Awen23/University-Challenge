@@ -7,9 +7,16 @@ class Overworld(BaseState):
         self.title = self.font.render("This is the overworld!", True, pygame.Color("white"))
         self.title_rect = self.title.get_rect(center=(640, 260))
         self.time_active = 0
+        # Background
+        self.bg_img = pygame.image.load("./overworld.png")
+
         # Character
-        self.character_rect = pygame.Rect((0,0), (50,50))
-        self.character_rect.center = self.screen_rect.center
+        self.character_img_down = pygame.transform.scale(pygame.image.load("./duck/duck_down.png"), (35, 50))
+        self.character_img_left = pygame.transform.scale(pygame.image.load("./duck/duck_left.png"), (50, 35))
+        self.character_img_right = pygame.transform.scale(pygame.image.load("./duck/duck_right.png"), (50, 35))
+        self.character_img_up = pygame.transform.scale(pygame.image.load("./duck/duck_up.png"), (35, 50))
+        self.character_img = self.character_img_down
+        self.character_rect = self.character_img.get_rect(topleft=(0,0))
         # Location icons
         self.location_rects = {}
         self.initialise_locations()
@@ -47,23 +54,27 @@ class Overworld(BaseState):
     def handle_keys(self, mover):
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT]:
-           self.character_rect.move_ip(-2, 0)
+            self.character_img = self.character_img_left
+            self.character_rect.move_ip(-4, 0)
         elif key[pygame.K_RIGHT]:
-           self.character_rect.move_ip(2, 0)
+            self.character_img = self.character_img_right
+            self.character_rect.move_ip(4, 0)
         elif key[pygame.K_UP]:
-           self.character_rect.move_ip(0, -2)
+            self.character_img = self.character_img_up
+            self.character_rect.move_ip(0, -4)
         elif key[pygame.K_DOWN]:
-           self.character_rect.move_ip(0, 2)
+            self.character_img = self.character_img_down
+            self.character_rect.move_ip(0, 4)
 
     def get_event(self, event):
         if event.type == pygame.QUIT:
             self.quit = True
 
     def draw(self, surface):
-        surface.fill(pygame.Color("green"))
+        surface.blit(self.bg_img, self.bg_img.get_rect())
         surface.blit(self.title, self.title_rect)
         # Draw character rect
-        pygame.draw.rect(surface, pygame.Color("blue"), self.character_rect)
+        surface.blit(self.character_img, self.character_rect)
         # Draw locations rects
         for loc_rect in self.location_rects.values():
             pygame.draw.rect(surface, pygame.Color("red"), loc_rect)

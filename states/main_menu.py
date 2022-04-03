@@ -37,7 +37,6 @@ class MainMenu(BaseState):
                 self.done = True
 
     def draw(self, surface):
-        #surface.fill(pygame.Color("blue"))
         surface.blit(self.bg_img, self.bg_rect)
         self.bg_rect.move_ip(self.bg_scroll)
         if self.bg_rect.top == self.screen_rect.top:
