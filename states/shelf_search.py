@@ -1,7 +1,7 @@
 import random
 import pygame
 from .base import BaseState
-bg = pygame.image.load("library/shelves_blurred_cropped.png")
+
 def human_readable_coordinates(tup):
     return (tup[0] + 1, tup[1] + 1)
 class Shelf(pygame.sprite.Sprite):
@@ -15,8 +15,10 @@ class Shelf(pygame.sprite.Sprite):
 class ShelfSearch(BaseState):
     def __init__(self):
         super(ShelfSearch, self).__init__()
+        self.bg = pygame.image.load("library/shelves_blurred_cropped.png")
+        self.bg = pygame.transform.scale(self.bg, (1280, 720))
         self.font = pygame.font.SysFont('serif.ttf', 50)
-        self.title = self.font.render("Shelf search!!!!!!!!!", True, pygame.Color("white"))
+        self.title = self.font.render("Shelf search!!!!!!!!!", True, pygame.Color("orange"))
         self.title_rect = self.title.get_rect(center=(300, 600))
         self.next_state = "OVERWORLD"
         self.shelves = []
@@ -27,7 +29,7 @@ class ShelfSearch(BaseState):
             row = []
             j = 0
             for y in range(50, 500, 100):
-                rect = pygame.Rect(x, y + 25, 50, 75)
+                rect = pygame.Rect(x+25, y + 25, 50, 75)
                 row.append(Shelf(i, j, rect))
                 j += 1
             self.shelves.append(row)
@@ -49,10 +51,13 @@ class ShelfSearch(BaseState):
                 self.score += 1
                 self.target = self.generate_target()
     def draw(self, surface):
-        surface.blit(bg, (0, 0))
-        pygame.transform.scale(surface, 2)
+        surface.blit(self.bg, (0, 0))
         surface.blit(self.title, self.title_rect)
         color = (181,80,34)
+        black_box = pygame.Surface((1280,720))  # the size of your rect
+        black_box.set_alpha(128)                # alpha level
+        black_box.fill((255,255,255))           # this fills the entire surface
+        surface.blit(black_box, (0,0))
         surface.blit(self.target_text, self.target_text_rect)
         surface.blit(self.font.render(str(human_readable_coordinates(self.target)), True, (255,0,0)), (600, 600))
         surface.blit(self.font.render(str(self.score), True, (0,0,250)), (500, 600))
