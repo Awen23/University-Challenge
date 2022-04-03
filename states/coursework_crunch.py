@@ -5,6 +5,7 @@ import time
 import re
 
 pygame.font.init()
+pygame.mixer.init()
 
 class CourseworkCrunch(BaseState):
     def __init__(self):
@@ -16,6 +17,7 @@ class CourseworkCrunch(BaseState):
         self.ending = False
         self.bg = pygame.image.load("states/data/computer.png")
         self.run_pic = pygame.image.load('states/data/run.png')
+        self.ambience = pygame.mixer.music.load("states/data/1w_ambient.mp3")
         self.run_over = self.run_pic.copy()
         # this works on images with per pixel alpha too
         alpha = 128
@@ -108,8 +110,10 @@ class CourseworkCrunch(BaseState):
     def draw(self, surface):
         if not self.start_time:
             self.start_time = time.time()
+            pygame.mixer.music.set_volume(0.7)
+            pygame.mixer.music.play()
         else:
-            if (time.time() - self.start_time) > 30:
+            if (time.time() - self.start_time) > 60:
                 self.ending = True
 
         surface.blit(self.bg, (0, 0))

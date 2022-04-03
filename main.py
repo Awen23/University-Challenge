@@ -29,5 +29,5 @@ states = {
 }
 
 # game = Game(screen, states, "MAIN MENU")
-game = Game(screen, states, "COURSEWORK CRUNCH GAME START")
+game = Game(screen, states, "OVERWORLD")
 game.run()

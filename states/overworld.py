@@ -88,4 +88,3 @@ class Overworld(BaseState):
         for loc in self.locations.values():
             surface.blit(loc[0], loc[1])
             #pygame.draw.rect(surface, pygame.Color("red"), loc_rect)
-    

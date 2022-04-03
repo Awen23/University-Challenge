@@ -3,6 +3,8 @@ from .base import BaseState
 import random
 import time
 
+pygame.mixer.init()
+
 class TicketsThanks(BaseState):
     def __init__(self):
         super(TicketsThanks, self).__init__()
@@ -10,6 +12,8 @@ class TicketsThanks(BaseState):
         self.title_rect = self.title.get_rect(center=self.screen_rect.center)
         self.next_state = "OVERWORLD"
         self.start_time = False
+        self.ambience = pygame.mixer.music.load("states/data/bus_ambient.mp3")
+
 
         self.words = ["cord", "lord", "tree", "fear", "plea", "cold", "door", "west", "read", "reed", "boot", "soot", "noot", "wear", "tear", 
                         "rear", "free", "feed", "root", "join", "pain", "rats", "wire"]
@@ -90,6 +94,8 @@ class TicketsThanks(BaseState):
     def draw(self, surface):
         if not self.start_time:
             self.start_time = time.time()
+            pygame.mixer.music.set_volume(0.7)
+            pygame.mixer.music.play()
         else:
             if (time.time() - self.start_time) > 30:
                 self.ending = True
