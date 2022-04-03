@@ -27,6 +27,7 @@ class Game(object):
         self.state.startup(persistent)
 
     def update(self, dt):
+        #self.state.other_states = self.states
         if self.state.quit:
             self.done = True
         elif self.state.done:
