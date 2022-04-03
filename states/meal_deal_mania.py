@@ -56,8 +56,8 @@ class MealDealMania(BaseState):
         self.inventory = []
         # Player score
         self.score = 0
-        self.score_text = self.font.render("Score: " + str(self.score), True, pygame.Color("white"))
-        self.score_rect = self.score_text.get_rect(topleft = (1000, 0))
+        # self.score_text = self.font.render("Score: " + str(self.score), True, pygame.Color("white"))
+        # self.score_rect = self.score_text.get_rect(topleft = (1000, 0))
 
         self.score_rect = pygame.Rect(460, 7, 50, 30)
         self.time_rect = pygame.Rect(660, 7, 50, 30)
@@ -234,10 +234,10 @@ class MealDealMania(BaseState):
         # self.silhouette1_rect.move_ip(5, 0)
         # self.silhouette2_rect.move_ip(-5, 0)
         
-        surface.blit(self.my_font.render("Score: " + str(self.score), True, pygame.Color("white")), self.score_rect) # score
-        self.timer = math.ceil(30 - (time.time() - self.start_time))
+        #surface.blit(self.my_font.render("Score: " + str(self.score), True, pygame.Color("white")), self.score_rect) # score
+        #self.timer = math.ceil(30 - (time.time() - self.start_time))
         
-        surface.blit(self.my_font.render("Time: " + str(self.timer), True, pygame.Color("white")), self.timer_rect)
+        #surface.blit(self.my_font.render("Time: " + str(self.timer), True, pygame.Color("white")), self.timer_rect)
 
         text_surface = self.my_font.render("Score: " + str(self.score), True, pygame.Color("white"))
         surface.blit(text_surface, (self.score_rect.x, self.score_rect.y))
