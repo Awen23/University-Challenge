@@ -21,7 +21,7 @@ class CourseworkCrunch(BaseState):
         alpha = 128
         self.run_over.fill((255, 255, 255, alpha), None, pygame.BLEND_RGBA_MULT)
         self.questions = open("states/data/stack_overflow.txt", "r").read().split("\n")
-        self.snippets = open("states/data/code.txt", "r").read().split("@@")
+        self.snippets = open("states/data/text.txt", "r").read().split("\n") #CHANGE TO CODE AND @@
         #print(pygame.font.get_fonts())
         self.random_index = random.randint(0, len(self.questions) - 1)
         self.current_question = self.questions[self.random_index]
