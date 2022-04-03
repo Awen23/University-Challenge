@@ -4,14 +4,19 @@ from .base import BaseState
 import random
 from operator import attrgetter
 import copy
+import time
+
+pygame.mixer.init()
 
 class MealDealMania(BaseState):
     def __init__(self):
         super(MealDealMania, self).__init__()
-        self.title = self.font.render("Meal deal maniaaaa", True, pygame.Color("white"))
-        self.title_rect = self.title.get_rect(center=self.screen_rect.center)
+        #self.title = self.font.render("Meal deal maniaaaa", True, pygame.Color("white"))
+        #self.title_rect = self.title.get_rect(center=self.screen_rect.center)
         self.next_state = "OVERWORLD"
         self.score = 0
+        self.start_time = False
+        self.ending = False
 
         # Background image
         self.background = pygame.image.load("./fresh/shelves.png").convert_alpha()
@@ -21,6 +26,10 @@ class MealDealMania(BaseState):
         self.sandwich = ("sandwich", pygame.image.load("./fresh/sandwich-small.png"), True)
         self.crisps = ("crisps", pygame.image.load("./fresh/crisps-small.png"), True)
         self.drink = ("drink", pygame.image.load("./fresh/drink-small.png"), True)
+
+        self.my_font = pygame.font.Font("states/data/PixeloidSans.ttf", 15)
+        self.my_big_font = pygame.font.Font("states/data/PixeloidSansBold.ttf", 40)
+
 
         self.wrap = ("wrap", pygame.image.load("./fresh/wrap-small.png"), False)
         self.chocolate = ("chocolate", pygame.image.load("./fresh/chocolate-small.png"), False)
@@ -43,8 +52,14 @@ class MealDealMania(BaseState):
         self.inventory = []
         # Player score
         self.score = 0
-        self.score_text = self.font.render("Score: " + str(self.score), True, pygame.Color("white"))
-        self.score_rect = self.score_text.get_rect(topleft = (1000, 0))
+       # self.score_text = self.font.render("Score: " + str(self.score), True, pygame.Color("white"))
+        #self.score_rect = self.score_text.get_rect(topleft = (1000, 0))
+
+        self.score_rect = pygame.Rect(460, 7, 50, 30)
+        self.time_rect = pygame.Rect(660, 7, 50, 30)
+
+        self.score_final = pygame.Surface((680,420), pygame.SRCALPHA)   # per-pixel alpha
+        self.score_final.fill((0,0,0,200))
 
         self.round = 0
 
@@ -122,44 +137,50 @@ class MealDealMania(BaseState):
     def get_event(self, event):
         if event.type == pygame.QUIT:
             self.quit = True
-        elif event.type == pygame.MOUSEMOTION:
-            mouse_pos = pygame.mouse.get_pos()
-            moused_prods = [p for s in self.products for p in s if p.rect.collidepoint(mouse_pos)]
-            if (len(moused_prods) != 0):
-                self.last_moused_prod = moused_prods[0]
-                self.last_moused_prod.img = pygame.transform.scale(self.last_moused_prod.img, (100,100))
-            else:
-                self.last_moused_prod.img = pygame.transform.scale(self.last_moused_prod.img, (90,90))
-        elif event.type == pygame.MOUSEBUTTONUP:
-            mouse_pos = pygame.mouse.get_pos()
-            clicked_prods = [p for s in self.products for p in s if p.rect.collidepoint(mouse_pos)]
-            if (len(clicked_prods) == 0):
-                return
-            prod = clicked_prods[0]
-            # Make product disappear
-            #prod.img = pygame.Surface(prod.size, pygame.SRCALPHA, 32).convert_alpha()
-            clicked_prods[0].img.set_alpha(0)
-            # Replenish product
-            #self.replenish_product(clicked_prods[0])
-            # Add to inventory
-            if len(self.inventory) < 3:
-                # Display inventory in top right pls
-                self.inventory.append(prod)
-            if len(self.inventory) == 3:
-                # Test for win state
-                # Are all items different?
-                if self.has_duplicates(self.inventory):
-                    print("NOT ALL ITEMS ARE DIFFERENT")
+        
+        if not self.ending:
+            if event.type == pygame.MOUSEMOTION:
+                mouse_pos = pygame.mouse.get_pos()
+                moused_prods = [p for s in self.products for p in s if p.rect.collidepoint(mouse_pos)]
+                if (len(moused_prods) != 0):
+                    self.last_moused_prod = moused_prods[0]
+                    self.last_moused_prod.img = pygame.transform.scale(self.last_moused_prod.img, (100,100))
                 else:
-                    # Are all three items in inventory in meal deal?
-                    if all(p.is_in_meal_deal for p in self.inventory):
-                        print("MEAL DEAL SUCCESS")
-                        self.score += 100
-                
-                self.inventory = []
-                self.products = []
-                self.load_products()
-                self.round += 1
+                    self.last_moused_prod.img = pygame.transform.scale(self.last_moused_prod.img, (90,90))
+            elif event.type == pygame.MOUSEBUTTONUP:
+                mouse_pos = pygame.mouse.get_pos()
+                clicked_prods = [p for s in self.products for p in s if p.rect.collidepoint(mouse_pos)]
+                if (len(clicked_prods) == 0):
+                    return
+                prod = clicked_prods[0]
+                # Make product disappear
+                #prod.img = pygame.Surface(prod.size, pygame.SRCALPHA, 32).convert_alpha()
+                clicked_prods[0].img.set_alpha(0)
+                # Replenish product
+                #self.replenish_product(clicked_prods[0])
+                # Add to inventory
+                if len(self.inventory) < 3:
+                    # Display inventory in top right pls
+                    self.inventory.append(prod)
+                if len(self.inventory) == 3:
+                    # Test for win state
+                    # Are all items different?
+                    if self.has_duplicates(self.inventory):
+                        print("NOT ALL ITEMS ARE DIFFERENT")
+                    else:
+                        # Are all three items in inventory in meal deal?
+                        if all(p.is_in_meal_deal for p in self.inventory):
+                            print("MEAL DEAL SUCCESS")
+                            self.score += 100
+                    
+                    self.inventory = []
+                    self.products = []
+                    self.load_products()
+                    self.round += 1
+        else:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.button_box.collidepoint(event.pos):
+                    self.done = True
 
 
     def draw_products(self, surface):
@@ -180,6 +201,15 @@ class MealDealMania(BaseState):
         
     
     def draw(self, surface):
+        if not self.start_time:
+            self.start_time = time.time()
+            self.ambience = pygame.mixer.music.load("states/data/bus_ambient.mp3")
+            pygame.mixer.music.set_volume(0.7)
+            pygame.mixer.music.play()
+        else:
+            if (time.time() - self.start_time) > 30:
+                self.ending = True
+
         surface.blit(self.background, (0,0))
         self.draw_products(surface)
         # draw silhouette(s)
@@ -189,7 +219,34 @@ class MealDealMania(BaseState):
         # self.silhouette1_rect.move_ip(5, 0)
         # self.silhouette2_rect.move_ip(-5, 0)
 
-        surface.blit(self.font.render("Score: " + str(self.score), True, pygame.Color("white")), self.score_rect) # score
+        text_surface = self.my_font.render("Score: " + str(self.score), True, pygame.Color("white"))
+        surface.blit(text_surface, (self.score_rect.x, self.score_rect.y))
+
+        text_surface = self.my_font.render("Time: " + str(30 - round(time.time() - self.start_time)), True, pygame.Color("white"))
+        surface.blit(text_surface, (self.time_rect.x, self.time_rect.y))
+       # surface.blit(self.font.render("Score: " + str(self.score), True, pygame.Color("white")), self.score_rect) # score
+
+        if self.ending:
+            #pygame.draw.rect(surface, (0,0,0), self.score_final)
+            surface.blit(self.score_final, (300, 150))
+            text_surface = self.my_big_font.render("Score: " + str(self.score), True, (255,255,255))
+            size = self.my_big_font.size("Score: " + str(self.score))
+            surface.blit(text_surface, (640-round(size[0]/2), 250))
+
+            b_len_x = 210
+            b_len_y = 90
+            mos_x, mos_y = pygame.mouse.get_pos()
+            if mos_x>self.button_box.x and (mos_x<self.button_box.x+b_len_x):
+                x_inside = True
+            else: x_inside = False
+            if mos_y>self.button_box.y and (mos_y<self.button_box.y+b_len_y):
+                y_inside = True
+            else: y_inside = False
+            if x_inside and y_inside:
+                #Mouse is hovering over button
+                surface.blit(self.next_button_over, self.next_button_over.get_rect(center = self.button_box.center))
+            else:
+                surface.blit(self.next_button, self.next_button.get_rect(center = self.button_box.center))
 
 
 class Product():

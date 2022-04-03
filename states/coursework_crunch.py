@@ -17,7 +17,6 @@ class CourseworkCrunch(BaseState):
         self.ending = False
         self.bg = pygame.image.load("states/data/computer.png")
         self.run_pic = pygame.image.load('states/data/run.png')
-        self.ambience = pygame.mixer.music.load("states/data/1w_ambient.mp3")
         self.run_over = self.run_pic.copy()
         # this works on images with per pixel alpha too
         alpha = 128
@@ -110,6 +109,7 @@ class CourseworkCrunch(BaseState):
     def draw(self, surface):
         if not self.start_time:
             self.start_time = time.time()
+            self.ambience = pygame.mixer.music.load("states/data/1w_ambient.mp3")
             pygame.mixer.music.set_volume(0.7)
             pygame.mixer.music.play()
         else:
