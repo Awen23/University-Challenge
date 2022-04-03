@@ -24,7 +24,9 @@ class CourseworkCrunch(BaseState):
         self.questions = open("states/data/stack_overflow.txt", "r").read().split("\n")
         self.snippets = open("states/data/code.txt", "r").read().split("@@") 
         #print(pygame.font.get_fonts())
-        self.random_index = random.randint(0, len(self.questions) - 1)
+        self.random_index = random.randint(0, len(self.questions) - 2)
+        #print(len(self.questions))
+        #print(len(self.snippets))
         self.current_question = self.questions[self.random_index]
         self.current_snippet = self.snippets[self.random_index]
         self.my_font = pygame.font.Font("states/data/PixeloidSans.ttf", 12)

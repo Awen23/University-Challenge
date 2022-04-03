@@ -10,7 +10,7 @@ fn main() {
 struct FloatContainer(f64);
 fn main() {
     let (a, b) = (FloatContainer(1.0), FloatContainer(1.0));
-    println!("{}, {}, {}", a < b, a == b, a > b); //false,false,false
+    println!("{}, {}, {}", a < b, a == b, a > b);
 }
 @@my_array = [:foo]
 flatten([1, [2, [3, [4]]]], my_array)
