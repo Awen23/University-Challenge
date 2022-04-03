@@ -82,6 +82,7 @@ class DuckDuckRevolution(BaseState):
         self.strike_line = StrikeLine(pygame.Rect(self.screen_rect.center[0], 0, 2, 800))
         self.arrow_queue = [Arrow(Direction.LEFT, 0, heights[Direction.LEFT]), Arrow(Direction.RIGHT, 200, heights[Direction.RIGHT])]
         self.my_font = pygame.font.Font("states/data/PixeloidSansBold.ttf", 40)
+        self.my_big_font = pygame.font.Font("states/data/PixeloidSansBold.ttf", 40)
         self.receptor_right = pygame.transform.scale(pygame.image.load("./noteskin/receptor_right.png"), (100,100))
         self.receptor_left = pygame.transform.scale(pygame.image.load("./noteskin/receptor_left.png"), (100,100))
         self.receptor_down = pygame.transform.scale(pygame.image.load("./noteskin/receptor_down.png"), (100,100))
@@ -94,37 +95,51 @@ class DuckDuckRevolution(BaseState):
         }
         self.start_time = None
 
+        self.score_final = pygame.Surface((680,420), pygame.SRCALPHA)   # per-pixel alpha
+        self.score_final.fill((0,0,0,200))
+        #self.score_final = pygame.Rect(300,150,680,420)
+        self.button_box = pygame.Rect(535,400,210,90)
+        self.next_button = pygame.image.load("states/data/nextbutton.png")
+        self.next_button_over = pygame.image.load("states/data/nextbutton_highlighted.png")
+        self.ending = False
+
 
 
     def get_event(self, event):
         if event.type == pygame.QUIT:
             self.quit = True
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                self.up_arrow_currently_down = True
-                self.keys_counter += 1
-            elif event.key == pygame.K_LEFT:
-                self.left_arrow_currently_down = True
-                self.keys_counter += 1
-            elif event.key == pygame.K_DOWN:
-                self.keys_counter += 1
-                self.down_arrow_currently_down = True
-            elif event.key == pygame.K_RIGHT:
-                self.keys_counter += 1
-                self.right_arrow_currently_down = True
-        elif event.type == pygame.KEYUP:            
-            if event.key == pygame.K_UP:
-                self.keys_counter -= 1
-                self.up_arrow_currently_down = False
-            elif event.key == pygame.K_LEFT:
-                self.keys_counter -= 1
-                self.left_arrow_currently_down = False
-            elif event.key == pygame.K_DOWN:
-                self.keys_counter -= 1
-                self.down_arrow_currently_down = False
-            elif event.key == pygame.K_RIGHT:
-                self.keys_counter -= 1
-                self.right_arrow_currently_down = False
+        if not self.ending:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    self.up_arrow_currently_down = True
+                    self.keys_counter += 1
+                elif event.key == pygame.K_LEFT:
+                    self.left_arrow_currently_down = True
+                    self.keys_counter += 1
+                elif event.key == pygame.K_DOWN:
+                    self.keys_counter += 1
+                    self.down_arrow_currently_down = True
+                elif event.key == pygame.K_RIGHT:
+                    self.keys_counter += 1
+                    self.right_arrow_currently_down = True
+            elif event.type == pygame.KEYUP:            
+                if event.key == pygame.K_UP:
+                    self.keys_counter -= 1
+                    self.up_arrow_currently_down = False
+                elif event.key == pygame.K_LEFT:
+                    self.keys_counter -= 1
+                    self.left_arrow_currently_down = False
+                elif event.key == pygame.K_DOWN:
+                    self.keys_counter -= 1
+                    self.down_arrow_currently_down = False
+                elif event.key == pygame.K_RIGHT:
+                    self.keys_counter -= 1
+                    self.right_arrow_currently_down = False
+        else:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.button_box.collidepoint(event.pos):
+                    self.__init__()
+                    self.done = True
     
     def draw(self, surface):
         if not self.start_time:
@@ -135,7 +150,7 @@ class DuckDuckRevolution(BaseState):
         else:
             if (time.time() - self.start_time) > 5:
                 pygame.mixer.music.fadeout(1000)
-                self.done = True
+                self.ending = True
 
         surface.blit(bg, (0, 0))
         #surface.blit(self.title, self.title_rect)
@@ -155,6 +170,27 @@ class DuckDuckRevolution(BaseState):
             surface.blit(arrow_to_draw, arrow_to_draw.get_rect(center=(arrow.centre_x, heights[arrow.direction])))
             
             #pygame.draw.polygon(surface, colours[arrow.direction],  list(map(lambda x: (x[0] + arrow.centre_x, x[1]+heights[arrow.direction]), polygons[arrow.direction])))
+        if self.ending:
+            #pygame.draw.rect(surface, (0,0,0), self.score_final)
+            surface.blit(self.score_final, (300, 150))
+            text_surface = self.my_big_font.render("Score: " + str(self.score), True, (255,255,255))
+            size = self.my_big_font.size("Score: " + str(self.score))
+            surface.blit(text_surface, (640-round(size[0]/2), 250))
+
+            b_len_x = 210
+            b_len_y = 90
+            mos_x, mos_y = pygame.mouse.get_pos()
+            if mos_x>self.button_box.x and (mos_x<self.button_box.x+b_len_x):
+                x_inside = True
+            else: x_inside = False
+            if mos_y>self.button_box.y and (mos_y<self.button_box.y+b_len_y):
+                y_inside = True
+            else: y_inside = False
+            if x_inside and y_inside:
+                #Mouse is hovering over button
+                surface.blit(self.next_button_over, self.next_button_over.get_rect(center = self.button_box.center))
+            else:
+                surface.blit(self.next_button, self.next_button.get_rect(center = self.button_box.center))
 
     def update(self, dt):
         if pygame.time.get_ticks() % 200 == 0:

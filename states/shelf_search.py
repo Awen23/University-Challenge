@@ -59,6 +59,9 @@ class ShelfSearch(BaseState):
         self.next_button_over = pygame.image.load("states/data/nextbutton_highlighted.png")
         self.ending = False
 
+    def startup(self, persistent):
+        self.ending = False
+
     def generate_target(self):
         x = random.randint(0, len(self.shelves) - 1)
         y = random.randint(0, len(self.shelves[x]) - 1)
@@ -75,6 +78,7 @@ class ShelfSearch(BaseState):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.button_box.collidepoint(event.pos):
                     print("DONE")
+                    self.__init__()
                     self.done = True
     def draw(self, surface):
         if not self.start_time:
@@ -83,7 +87,7 @@ class ShelfSearch(BaseState):
             pygame.mixer.music.set_volume(0.7)
             pygame.mixer.music.play()
         else:
-            if (time.time() - self.start_time) > 30:
+            if (time.time() - self.start_time) > 5:
                 self.ending = True
 
         surface.blit(self.bg, (0, 0))
@@ -128,6 +132,7 @@ class ShelfSearch(BaseState):
                 surface.blit(self.next_button_over, self.next_button_over.get_rect(center = self.button_box.center))
             else:
                 surface.blit(self.next_button, self.next_button.get_rect(center = self.button_box.center))
+            
                 
     def update(self, dt):
         return super().update(dt)

@@ -31,6 +31,6 @@ states = {
     "COURSEWORK CRUNCH GAME START": GameStart("Coursework Crunch!", "states/data/1w.png", "states/data/busboi.png", "states/data/coursework_crash.txt", "COURSEWORK CRUNCH")
 }
 
-# game = Game(screen, states, "MAIN MENU")
-game = Game(screen, states, "OVERWORLD")
+game = Game(screen, states, "MAIN MENU")
+#game = Game(screen, states, "OVERWORLD")
 game.run()

@@ -104,6 +104,7 @@ class CourseworkCrunch(BaseState):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.button_box.collidepoint(event.pos):
                     print("DONE")
+                    self.__init__()
                     self.done = True
     
     def draw(self, surface):

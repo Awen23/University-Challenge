@@ -199,6 +199,7 @@ class MealDealMania(BaseState):
         else:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.button_box.collidepoint(event.pos):
+                    self.__init__()
                     self.done = True
 
 

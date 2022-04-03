@@ -13,6 +13,7 @@ class BaseState(object):
     
     def startup(self, persistent):
         self.persist = persistent
+        self.done = False
 
     # Abstract methods to be implemented by child classes
     def get_event(self, event):
