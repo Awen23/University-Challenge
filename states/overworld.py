@@ -18,19 +18,22 @@ class Overworld(BaseState):
         self.character_img = self.character_img_down
         self.character_rect = self.character_img.get_rect(topleft=(0,0))
         # Location icons
-        self.location_rects = {}
+        self.locations = {}
         self.initialise_locations()
     
     def initialise_locations(self):
         # Make this better..
-        self.location_rects["MEAL DEAL MANIA"] = pygame.Rect((0,0), (50,50))
-        self.location_rects["MEAL DEAL MANIA"].center = (740, 360)
+        mdm = pygame.transform.scale(pygame.image.load("./fresh_facade.png"), (120, 120))
+        self.locations["MEAL DEAL MANIA"] = ( mdm, mdm.get_rect(center=(320,260)) )
 
-        self.location_rects["COURSEWORK CRUNCH"] = pygame.Rect((0,0), (50,50))
-        self.location_rects["COURSEWORK CRUNCH"].center = (540, 360)
+        # self.locations["COURSEWORK CRUNCH"] = pygame.Rect((0,0), (50,50))
+        # self.locations["COURSEWORK CRUNCH"].center = (540, 360)
 
-        self.location_rects["SHELF SEARCH"] = pygame.Rect((0,0), (50,50))
-        self.location_rects["SHELF SEARCH"].center = (640, 460)
+        ss =  pygame.transform.scale(pygame.image.load("./library_facade.png"), (120, 120))
+        self.locations["SHELF SEARCH"] = (ss, ss.get_rect(center=(940, 320)))
+
+        ddr = pygame.transform.scale(pygame.image.load("./su_facade.png"), (120, 120))
+        self.locations["DUCK DUCK REVOLUTION"] = (ddr, ddr.get_rect(center=(1060, 440)))
 
 
     # Runs continuously, it's the loop
@@ -42,11 +45,11 @@ class Overworld(BaseState):
         # Move character
         self.handle_keys(self.character_rect)
         # Maybe use pygame.Rect.collidedict instead...
-        intersect_index = self.character_rect.collidelist(list(self.location_rects.values()))
+        intersect_index = self.character_rect.collidelist([loc[1] for loc in self.locations.values()])
         # If != -1, we have intersected
         if intersect_index != -1:
             # Need to change next state here
-            self.next_state = list(self.location_rects.keys())[intersect_index]
+            self.next_state = list(self.locations.keys())[intersect_index]
             self.done = True
 
     # Handles arrow keys for moving character
@@ -76,5 +79,7 @@ class Overworld(BaseState):
         # Draw character rect
         surface.blit(self.character_img, self.character_rect)
         # Draw locations rects
-        for loc_rect in self.location_rects.values():
-            pygame.draw.rect(surface, pygame.Color("red"), loc_rect)
+        for loc in self.locations.values():
+            surface.blit(loc[0], loc[1])
+            #pygame.draw.rect(surface, pygame.Color("red"), loc_rect)
+    
