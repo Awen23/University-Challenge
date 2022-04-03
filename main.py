@@ -20,7 +20,7 @@ states = {
     # minigame states here
     "COURSEWORK CRUNCH": CourseworkCrunch(),
     "TICKETS THANKS": TicketsThanks(),
-    "GAME START": GameStart("Tickets Thanks!", "states/data/bus_stop.png", "states/data/busboi.png", "states/data/tickets_thanks.txt", "TICKETS THANKS")
+    "GAME START": GameStart("Tickets Thanks!", "states/data/bus_stop.png", "states/data/busboi.png", "states/data/tickets_thanks.txt", "TICKETS THANKS"),
     "MEAL DEAL MANIA": MealDealMania(),
     "DUCK DUCK REVOLUTION": DuckDuckRevolution()
 }
