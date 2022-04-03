@@ -1,0 +1,8 @@
+The deadline is near and new "features" keep 
+appearing! There's only one solution: Frantic
+Woogling
+How To Code:
+1. Type the code from HeapUnderflow
+2. Press run
+3. Press Ctrl+C then Ctrl+V to Woogle
+4. Repeat until you're not sure why it works

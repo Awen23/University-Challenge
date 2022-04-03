@@ -24,9 +24,10 @@ states = {
     "SHELF SEARCH": ShelfSearch(),
     "DUCK DUCK REVOLUTION": DuckDuckRevolution(),
     "TICKETS THANKS": TicketsThanks(),
-    "TICKETS THANKS GAME START": GameStart("Tickets Thanks!", "states/data/bus_stop.png", "states/data/busboi.png", "states/data/tickets_thanks.txt", "TICKETS THANKS")
+    "TICKETS THANKS GAME START": GameStart("Tickets Thanks!", "states/data/bus_stop.png", "states/data/busboi.png", "states/data/tickets_thanks.txt", "TICKETS THANKS"),
+    "COURSEWORK CRUNCH GAME START": GameStart("Coursework Crunch!", "states/data/1w.png", "states/data/busboi.png", "states/data/coursework_crash.txt", "COURSEWORK CRUNCH")
 }
 
 # game = Game(screen, states, "MAIN MENU")
-game = Game(screen, states, "OVERWORLD")
+game = Game(screen, states, "COURSEWORK CRUNCH GAME START")
 game.run()
