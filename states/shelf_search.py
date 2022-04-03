@@ -47,7 +47,6 @@ class ShelfSearch(BaseState):
             if self.shelves[self.target[0]][self.target[1]].is_clicked():
                 self.score += 1
                 self.target = self.generate_target()
-                print(self.target)
     def draw(self, surface):
         surface.fill(pygame.Color("darkolivegreen"))
         surface.blit(self.title, self.title_rect)

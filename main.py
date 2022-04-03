@@ -1,5 +1,6 @@
 import sys
 import pygame
+from states.duck_duck_revolution import DuckDuckRevolution
 from states.meal_deal_mania import MealDealMania
 from states.shelf_search import ShelfSearch
 
@@ -12,7 +13,7 @@ screen = pygame.display.set_mode((1280, 720))
 states = {
     "OVERWORLD": Overworld(),
     # minigame states here
-    "SHELF SEARCH": ShelfSearch()
+    "DUCK DUCK REVOLUTION": DuckDuckRevolution()
 }
 
 game = Game(screen, states, "OVERWORLD")
