@@ -150,7 +150,7 @@ class MealDealMania(BaseState):
             self.start_time = time.time()
         else:
             if (time.time() - self.start_time > 30):
-                self.done = True
+                self.ending = True
         pass
 
     def get_event(self, event):
@@ -189,11 +189,12 @@ class MealDealMania(BaseState):
                     # Test for win state
                     # Are all items different?
                     if self.has_duplicates(self.inventory):
-                        print("NOT ALL ITEMS ARE DIFFERENT")
+                        #print("NOT ALL ITEMS ARE DIFFERENT")
+                        pass
                     else:
                         # Are all three items in inventory in meal deal?
                         if all(p.is_in_meal_deal for p in self.inventory):
-                            print("MEAL DEAL SUCCESS")
+                            #print("MEAL DEAL SUCCESS")
                             self.score += 100
                     
                     self.inventory = []
