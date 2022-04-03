@@ -21,22 +21,23 @@ class Overworld(BaseState):
         self.locations = {}
         self.initialise_locations()
     
+    def startup(self, persistent):
+        self.character_rect = self.character_img.get_rect(topleft=(0,0))
+
+    
     def initialise_locations(self):
         # Make this better..
         cc = pygame.transform.scale(pygame.image.load("./1w_facade.png"), (200, 100))
         self.locations["COURSEWORK CRUNCH"] = (cc, cc.get_rect(center=(320, 240)))
 
         mdm = pygame.transform.scale(pygame.image.load("./fresh_facade.png"), (120, 120))
-        self.locations["MEAL DEAL MANIA"] = (mdm, mdm.get_rect(center=(260,560)))
-
-        # self.locations["COURSEWORK CRUNCH"] = pygame.Rect((0,0), (50,50))
-        # self.locations["COURSEWORK CRUNCH"].center = (540, 360)
+        self.locations["MEAL DEAL MANIA GAME START"] = (mdm, mdm.get_rect(center=(260,560)))
 
         ss =  pygame.transform.scale(pygame.image.load("./library_facade.png"), (120, 120))
         self.locations["SHELF SEARCH"] = (ss, ss.get_rect(center=(940, 320)))
 
         ddr = pygame.transform.scale(pygame.image.load("./su_facade.png"), (120, 120))
-        self.locations["DUCK DUCK REVOLUTION"] = (ddr, ddr.get_rect(center=(1060, 440)))
+        self.locations["DUCK DUCK REVOLUTION GAME START"] = (ddr, ddr.get_rect(center=(1060, 440)))
 
         tt = pygame.transform.scale(pygame.image.load("./bus_facade.png"), (120, 120))
         self.locations["TICKETS THANKS GAME START"] = (tt, tt.get_rect(center=(640, 640)))

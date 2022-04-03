@@ -5,6 +5,7 @@ import random
 from operator import attrgetter
 import copy
 import time
+import math
 
 class MealDealMania(BaseState):
     def __init__(self):
@@ -13,6 +14,7 @@ class MealDealMania(BaseState):
         self.title_rect = self.title.get_rect(center=self.screen_rect.center)
         self.next_state = "OVERWORLD" # SHOULD BE END SCREEN / SCORE SCREEN
         self.score = 0
+        self.time = 30
 
         # Background image
         self.background = pygame.image.load("./fresh/shelves.png").convert_alpha()
@@ -54,6 +56,9 @@ class MealDealMania(BaseState):
         self.my_font = pygame.font.Font("states/data/PixeloidSansBold.ttf", 40)
 
         self.start_time = False
+        self.timer = 30
+        self.timer_text = self.my_font.render("Time: " + str(self.timer), True, pygame.Color("white"))
+        self.timer_rect = self.timer_text.get_rect(topleft = (600, 0))
 
     
     def has_duplicates(self, seq):
@@ -200,9 +205,11 @@ class MealDealMania(BaseState):
         # surface.blit(self.silhouette, self.silhouette2_rect)
         # self.silhouette1_rect.move_ip(5, 0)
         # self.silhouette2_rect.move_ip(-5, 0)
-
+        
         surface.blit(self.my_font.render("Score: " + str(self.score), True, pygame.Color("white")), self.score_rect) # score
-
+        self.timer = math.ceil(30 - (time.time() - self.start_time))
+        
+        surface.blit(self.my_font.render("Time: " + str(self.timer), True, pygame.Color("white")), self.timer_rect)
 
 class Product():
     def __init__(self, pos):

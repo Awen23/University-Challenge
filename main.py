@@ -21,12 +21,14 @@ states = {
     # coursework crunch
     "COURSEWORK CRUNCH": CourseworkCrunch(),
     "MEAL DEAL MANIA": MealDealMania(),
+    "MEAL DEAL MANIA GAME START": GameStart("Meal Deal Mania!", "states/data/fresh.png", "states/data/busboi.png", "states/data/meal_deal_mania.txt", "MEAL DEAL MANIA"),
     "SHELF SEARCH": ShelfSearch(),
     "DUCK DUCK REVOLUTION": DuckDuckRevolution(),
+    "DUCK DUCK REVOLUTION GAME START": GameStart("Duck Duck Revolution!", "student_union/student_union_blurred.png", "states/data/busboi.png", "states/data/duck_duck_revolution.txt", "DUCK DUCK REVOLUTION"),
     "TICKETS THANKS": TicketsThanks(),
     "TICKETS THANKS GAME START": GameStart("Tickets Thanks!", "states/data/bus_stop.png", "states/data/busboi.png", "states/data/tickets_thanks.txt", "TICKETS THANKS")
 }
 
 # game = Game(screen, states, "MAIN MENU")
-game = Game(screen, states, "MEAL DEAL MANIA")
+game = Game(screen, states, "DUCK DUCK REVOLUTION")
 game.run()
