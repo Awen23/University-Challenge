@@ -234,10 +234,10 @@ class MealDealMania(BaseState):
         # self.silhouette1_rect.move_ip(5, 0)
         # self.silhouette2_rect.move_ip(-5, 0)
         
-        surface.blit(self.my_font.render("Score: " + str(self.score), True, pygame.Color("white")), self.score_rect) # score
-        self.timer = math.ceil(30 - (time.time() - self.start_time))
+        #surface.blit(self.my_font.render("Score: " + str(self.score), True, pygame.Color("white")), self.score_rect) # score
+        #self.timer = math.ceil(30 - (time.time() - self.start_time))
         
-        surface.blit(self.my_font.render("Time: " + str(self.timer), True, pygame.Color("white")), self.timer_rect)
+        #surface.blit(self.my_font.render("Time: " + str(self.timer), True, pygame.Color("white")), self.timer_rect)
 
         text_surface = self.my_font.render("Score: " + str(self.score), True, pygame.Color("white"))
         surface.blit(text_surface, (self.score_rect.x, self.score_rect.y))
