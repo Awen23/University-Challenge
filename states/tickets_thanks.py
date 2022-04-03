@@ -87,7 +87,6 @@ class TicketsThanks(BaseState):
         else:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.button_box.collidepoint(event.pos):
-                    print("DONE")
                     self.done = True
     
     def draw(self, surface):

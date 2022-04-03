@@ -259,13 +259,13 @@ class MealDealMania(BaseState):
             if mos_x>self.button_box.x and (mos_x<self.button_box.x+b_len_x):
                 x_inside = True
             else: x_inside = False
-                y_inside = True
             if mos_y>self.button_box.y and (mos_y<self.button_box.y+b_len_y):
+                y_inside = True
             else: y_inside = False
             if x_inside and y_inside:
                 #Mouse is hovering over button
-            else:
                 surface.blit(self.next_button_over, self.next_button_over.get_rect(center = self.button_box.center))
+            else:
                 surface.blit(self.next_button, self.next_button.get_rect(center = self.button_box.center))
 class Product():
     def __init__(self, pos):
