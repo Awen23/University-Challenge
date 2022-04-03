@@ -15,6 +15,9 @@ states = {
     "MAIN MENU": MainMenu(),
     "OVERWORLD": Overworld(),
     # minigame states here
+    # coursework crunch
+    "MEAL DEAL MANIA": MealDealMania(),
+    "SHELF SEARCH": ShelfSearch(),
     "DUCK DUCK REVOLUTION": DuckDuckRevolution()
 }
 

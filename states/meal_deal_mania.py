@@ -104,7 +104,7 @@ class MealDealMania(BaseState):
             if prod.is_in_meal_deal == True:
                 num_in_meal_deal += 1
         
-        print("num_in_meal_deal:" + str(num_in_meal_deal))
+        #print("num_in_meal_deal:" + str(num_in_meal_deal))
         if num_in_meal_deal >= 3:
             return
         else:
