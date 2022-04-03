@@ -27,5 +27,6 @@ states = {
     "TICKETS THANKS GAME START": GameStart("Tickets Thanks!", "states/data/bus_stop.png", "states/data/busboi.png", "states/data/tickets_thanks.txt", "TICKETS THANKS")
 }
 
-game = Game(screen, states, "MAIN MENU")
+# game = Game(screen, states, "MAIN MENU")
+game = Game(screen, states, "MEAL DEAL MANIA")
 game.run()

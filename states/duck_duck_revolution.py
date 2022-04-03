@@ -127,12 +127,13 @@ class DuckDuckRevolution(BaseState):
         self.arrow_queue = list(filter(lambda x: x.centre_x < 1400 and not(x.checked), self.arrow_queue))
         blocks_hit_list = pygame.sprite.spritecollide(self.strike_line, self.arrow_queue, False)
         if len(blocks_hit_list) > 0:
-            print(blocks_hit_list)
-        print(self.keys_counter)
+            #print(blocks_hit_list)
+            pass
+        #print(self.keys_counter)
         if self.keys_counter == 1:
             for arrow in blocks_hit_list:
                 if not(arrow.checked):
-                    print(self.score)
+                    #print(self.score)
                     if arrow.direction == Direction.LEFT and self.left_arrow_currently_down:
                         arrow.checked = True
                         self.score += 1

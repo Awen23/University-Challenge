@@ -23,8 +23,11 @@ class Overworld(BaseState):
     
     def initialise_locations(self):
         # Make this better..
+        cc = pygame.transform.scale(pygame.image.load("./1w_facade.png"), (200, 100))
+        self.locations["COURSEWORK CRUNCH"] = (cc, cc.get_rect(center=(320, 240)))
+
         mdm = pygame.transform.scale(pygame.image.load("./fresh_facade.png"), (120, 120))
-        self.locations["MEAL DEAL MANIA"] = ( mdm, mdm.get_rect(center=(320,260)) )
+        self.locations["MEAL DEAL MANIA"] = (mdm, mdm.get_rect(center=(260,560)))
 
         # self.locations["COURSEWORK CRUNCH"] = pygame.Rect((0,0), (50,50))
         # self.locations["COURSEWORK CRUNCH"].center = (540, 360)
