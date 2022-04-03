@@ -13,7 +13,7 @@ from states.main_menu import MainMenu
 from game import Game
 
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((1280, 720), pygame.FULLSCREEN)
 states = {
     "MAIN MENU": MainMenu(),
     "OVERWORLD": Overworld(),
@@ -33,4 +33,4 @@ states = {
 
 game = Game(screen, states, "MAIN MENU")
 #game = Game(screen, states, "OVERWORLD")
-game.run()
+game.run()  
