@@ -4,6 +4,10 @@ from pygame.locals import *
 from enum import Enum
 from .base import BaseState
 import random
+import time
+
+pygame.mixer.init()
+
 # WASD // UP LEFT DOWN RIGHT
 bg = pygame.image.load("student_union/student_union_blurred.png")
 
@@ -88,6 +92,8 @@ class DuckDuckRevolution(BaseState):
             Direction.DOWN:     pygame.transform.scale(pygame.image.load("./noteskin/redarrow_down.png"), (100,100)),
             Direction.RIGHT:    pygame.transform.scale(pygame.image.load("./noteskin/redarrow_right.png"), (100,100)),
         }
+        self.start_time = None
+
 
 
     def get_event(self, event):
@@ -119,7 +125,18 @@ class DuckDuckRevolution(BaseState):
             elif event.key == pygame.K_RIGHT:
                 self.keys_counter -= 1
                 self.right_arrow_currently_down = False
+    
     def draw(self, surface):
+        if not self.start_time:
+            self.bgm = pygame.mixer.music.load("./student_union/mr_brightside_8bit.mp3")
+            self.start_time = time.time()
+            pygame.mixer.music.set_volume(0.7)
+            pygame.mixer.music.play()
+        else:
+            if (time.time() - self.start_time) > 5:
+                pygame.mixer.music.fadeout(1000)
+                self.done = True
+
         surface.blit(bg, (0, 0))
         #surface.blit(self.title, self.title_rect)
         color = (0, 0, 0)
@@ -144,6 +161,7 @@ class DuckDuckRevolution(BaseState):
             self.arrow_queue.append(
                 Arrow(random.choice(directions), 0, 150))
         for x in self.arrow_queue:
+            x.update_x()
             x.update_x()
             x.update_x()
             x.update_x()

@@ -23,6 +23,7 @@ states = {
     "MEAL DEAL MANIA": MealDealMania(),
     "MEAL DEAL MANIA GAME START": GameStart("Meal Deal Mania!", "states/data/fresh.png", "states/data/busboi.png", "states/data/meal_deal_mania.txt", "MEAL DEAL MANIA"),
     "SHELF SEARCH": ShelfSearch(),
+    "SHELF SEARCH GAME START": GameStart("Shelf Search!", "./library_facade2.png", "states/data/busboi.png", "states/data/shelf_search.txt", "SHELF SEARCH"),
     "DUCK DUCK REVOLUTION": DuckDuckRevolution(),
     "DUCK DUCK REVOLUTION GAME START": GameStart("Duck Duck Revolution!", "student_union/student_union_blurred.png", "states/data/busboi.png", "states/data/duck_duck_revolution.txt", "DUCK DUCK REVOLUTION"),
     "TICKETS THANKS": TicketsThanks(),
