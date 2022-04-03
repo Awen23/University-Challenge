@@ -1,6 +1,7 @@
 import random
 import pygame
 from .base import BaseState
+bg = pygame.image.load("library/shelves_blurred_cropped.png")
 def human_readable_coordinates(tup):
     return (tup[0] + 1, tup[1] + 1)
 class Shelf(pygame.sprite.Sprite):
@@ -48,7 +49,8 @@ class ShelfSearch(BaseState):
                 self.score += 1
                 self.target = self.generate_target()
     def draw(self, surface):
-        surface.fill(pygame.Color("darkolivegreen"))
+        surface.blit(bg, (0, 0))
+        pygame.transform.scale(surface, 2)
         surface.blit(self.title, self.title_rect)
         color = (181,80,34)
         surface.blit(self.target_text, self.target_text_rect)
