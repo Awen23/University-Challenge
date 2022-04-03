@@ -1,0 +1,41 @@
+enumerate(array)
+list(enumerate(array))
+@@use std::fs;
+fn main() {
+    for path in fs::read_dir("./").unwrap() {
+        println!("Name: {}", path.unwrap().path().display())
+    }
+}
+@@#[derive(PartialEq, PartialOrd)]
+struct FloatContainer(f64);
+fn main() {
+    let (a, b) = (FloatContainer(1.0), FloatContainer(1.0));
+    println!("{}, {}, {}", a < b, a == b, a > b); //false,false,false
+}
+@@my_array = [:foo]
+flatten([1, [2, [3, [4]]]], my_array)
+my_array
+@@a = [[1,2], [2,3], [3,4]]
+a.map {|a,b| a+b }
+@@some_array.map {|x| x % 2 == 0 ? x * 3 : nil}.compact
+@@new String("test").equals("test")
+@@int *sieve = malloc(sizeof *sieve * length);
+@@#inner {
+  width: 50%;
+  margin: 0 auto;
+}
+@@dict(sorted(x.items(), key=lambda item: item[1]))
+@@SELECT id, MAX(rev)
+FROM YourTable
+GROUP BY id
+@@for index, row in df.iterrows():
+    print(row['c1'], row['c2'])
+@@int LAUNCH_SECOND_ACTIVITY = 1
+Intent i = new Intent(this, SecondActivity.class);
+startActivityForResult(i, LAUNCH_SECOND_ACTIVITY);
+@@my_list.count(1)
+@@const chunkSize = 10;
+for (let i = 0; i < array.length; i += chunkSize) {
+    const chunk = array.slice(i, i + chunkSize);
+}
+@@fmt.Printf("%+v\n", yourProject)

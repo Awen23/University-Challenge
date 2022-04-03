@@ -9,7 +9,7 @@ class TicketsThanks(BaseState):
         self.title = self.font.render("TicketsThanks", True, pygame.Color("white"))
         self.title_rect = self.title.get_rect(center=self.screen_rect.center)
         self.next_state = "OVERWORLD"
-        self.start_time = time.time()
+        self.start_time = False
 
         self.words = ["cord", "lord", "tree", "fear", "plea", "cold", "door", "west", "read", "reed", "boot", "soot", "noot", "wear", "tear", 
                         "rear", "free", "feed", "root", "join", "pain", "rats", "wire"]
@@ -37,8 +37,10 @@ class TicketsThanks(BaseState):
         self.score_rect = pygame.Rect(460, 7, 50, 30)
         self.time_rect = pygame.Rect(660, 7, 50, 30)
 
-        self.score_final = pygame.Rect(590,355,100,100)
-        self.button_box = pygame.Rect(600,400,210,90)
+        self.score_final = pygame.Surface((680,420), pygame.SRCALPHA)   # per-pixel alpha
+        self.score_final.fill((0,0,0,200))
+        #self.score_final = pygame.Rect(300,150,680,420)
+        self.button_box = pygame.Rect(535,400,210,90)
         self.next_button = pygame.image.load("states/data/nextbutton.png")
         self.next_button_over = pygame.image.load("states/data/nextbutton_highlighted.png")
         self.ending = False
@@ -61,9 +63,6 @@ class TicketsThanks(BaseState):
         if event.type == pygame.QUIT:
             self.quit = True
 
-        if (time.time() - self.start_time) > 3000:
-            print("here")
-            self.ending = True
 
         if not self.ending:
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -84,17 +83,24 @@ class TicketsThanks(BaseState):
                     self.word_changed = False
         else:
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if self.next_button.collidepoint(event.pos):
+                if self.button_box.collidepoint(event.pos):
+                    print("DONE")
                     self.done = True
     
     def draw(self, surface):
+        if not self.start_time:
+            self.start_time = time.time()
+        else:
+            if (time.time() - self.start_time) > 30:
+                self.ending = True
+
         surface.blit(self.bg, (0, 0))
 
         text_surface = self.my_font.render("Score: " + str(self.score), True, pygame.Color("white"))
         surface.blit(text_surface, (self.score_rect.x, self.score_rect.y))
 
-        text_surface = self.my_font.render("Time: " + str(30 - round((self.start_time - time.time()))), True, pygame.Color("white"))
-        surface.blit(text_surface, (self.time_rect.x, self.score_rect.y))
+        text_surface = self.my_font.render("Time: " + str(30 - round(time.time() - self.start_time)), True, pygame.Color("white"))
+        surface.blit(text_surface, (self.time_rect.x, self.time_rect.y))
 
         pygame.draw.rect(surface, (180,180,0), self.word_box)
         text_surface = self.my_big_font.render("Word: "  + self.words[self.word_index], True, pygame.Color("white"))
@@ -173,9 +179,12 @@ class TicketsThanks(BaseState):
             surface.blit(self.no_pic, self.no_pic.get_rect(center = self.no_button.center))
 
         if self.ending:
-            pygame.draw.rect(surface, (0,0,0), self.score_final)
+            #pygame.draw.rect(surface, (0,0,0), self.score_final)
+            surface.blit(self.score_final, (300, 150))
             text_surface = self.my_big_font.render("Score: " + str(self.score), True, (255,255,255))
-            surface.blit(text_surface, (self.score_final.topleft[0]+30, self.score_final.centery[1]))
+            size = self.my_big_font.size("Score: " + str(self.score))
+            surface.blit(text_surface, (640-round(size[0]/2), 250))
+
             b_len_x = 210
             b_len_y = 90
             mos_x, mos_y = pygame.mouse.get_pos()
