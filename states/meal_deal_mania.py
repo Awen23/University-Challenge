@@ -1,3 +1,4 @@
+from turtle import screensize
 import pygame
 from .base import BaseState
 import random
@@ -32,6 +33,12 @@ class MealDealMania(BaseState):
         self.load_products()
         self.last_moused_prod = self.products[0][0]
 
+        # Silhouettes
+        self.silhouette = pygame.image.load("./fresh/silhouette.png")
+        self.silhouette_rects = []
+        self.silhouette_rects.append(self.silhouette.get_rect(topleft=(-500, 400)))
+        self.silhouette_rects.append(self.silhouette.get_rect(topleft=(2000, 200)))
+
         # Three items to make the meal deal
         self.inventory = []
         # Player score
@@ -40,10 +47,6 @@ class MealDealMania(BaseState):
         self.score_rect = self.score_text.get_rect(topleft = (1000, 0))
 
         self.round = 0
-
-        self.crowds = []
-        self.crowd1_img = pygame.image.load("./fresh/crowd1.png")
-        self.crowds.append((self.crowd1_img, self.crowd1_img.get_rect()))
 
     
     def has_duplicates(self, seq):
@@ -162,21 +165,30 @@ class MealDealMania(BaseState):
     def draw_products(self, surface):
         first_x = 60
         first_y = 126
-
         for shelf in self.products:
             for prod in shelf:
                 surface.blit(prod.img, prod.pos)
-    
-    def draw_crowds(self, surface):
-        for crowd in self.crowds:
-            crowd[1].x = 0
-            crowd[1].y = 400
-            surface.blit(crowd[0], crowd[1])
+
+    def draw_silhouettes(self, surface):
+        for sil in self.silhouette_rects:
+            surface.blit(self.silhouette, sil)
+            if sil.right < 0:
+                print("hi")
+                sil.move_ip(5, 0)
+            elif sil.left > 1280:
+                sil.move_ip(-5, 0)
+        
     
     def draw(self, surface):
         surface.blit(self.background, (0,0))
         self.draw_products(surface)
-        self.draw_crowds(surface)
+        # draw silhouette(s)
+        self.draw_silhouettes(surface)
+        # surface.blit(self.silhouette, self.silhouette1_rect)
+        # surface.blit(self.silhouette, self.silhouette2_rect)
+        # self.silhouette1_rect.move_ip(5, 0)
+        # self.silhouette2_rect.move_ip(-5, 0)
+
         surface.blit(self.font.render("Score: " + str(self.score), True, pygame.Color("white")), self.score_rect) # score
 
 

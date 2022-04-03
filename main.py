@@ -19,15 +19,14 @@ states = {
     "OVERWORLD": Overworld(),
     # minigame states here
     # coursework crunch
+    "COURSEWORK CRUNCH": CourseworkCrunch(),
     "MEAL DEAL MANIA": MealDealMania(),
     "SHELF SEARCH": ShelfSearch(),
     "DUCK DUCK REVOLUTION": DuckDuckRevolution(),
-    "COURSEWORK CRUNCH": CourseworkCrunch(),
     "TICKETS THANKS": TicketsThanks(),
-    "GAME START": GameStart("Tickets Thanks!", "states/data/bus_stop.png", "states/data/busboi.png", "states/data/tickets_thanks.txt", "TICKETS THANKS"),
-    "MEAL DEAL MANIA": MealDealMania(),
-    "DUCK DUCK REVOLUTION": DuckDuckRevolution()
+    "TICKETS THANKS GAME START": GameStart("Tickets Thanks!", "states/data/bus_stop.png", "states/data/busboi.png", "states/data/tickets_thanks.txt", "TICKETS THANKS")
 }
 
-game = Game(screen, states, "MAIN MENU")
+# game = Game(screen, states, "MAIN MENU")
+game = Game(screen, states, "MEAL DEAL MANIA")
 game.run()
