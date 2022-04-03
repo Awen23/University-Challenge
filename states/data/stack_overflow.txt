@@ -1,0 +1,15 @@
+Javascript: How to update a nested json
+"Notice: Undefined variable" using PHP
+Do I cast the result of malloc?
+Pandas Merging 101
+How do you split a list into evenly sized chunks?
+SQL select only rows with max value on a column
+How can I access nested objects, arrays or JSON?
+What causes a java.lang.ArrayIndexOutOfBoundsException?
+How to randomize (shuffle) a JavaScript array?
+Using global variables in a function
+Retrieve only the queried element in MongoDB collection
+How do I sort a dictionary by value?
+How to round a number to n decimal places in Java
+How do I clone a list so that it doesn't change unexpectedly?
+Flatten an irregular list of lists
