@@ -28,10 +28,10 @@ colours = {
     Direction.RIGHT:    (180, 0, 180),
 }
 heights = {
-    Direction.UP:       620,
-    Direction.LEFT:     500,
-    Direction.DOWN:     380,
-    Direction.RIGHT:    260,
+    Direction.UP:       610,
+    Direction.LEFT:     460,
+    Direction.DOWN:     310,
+    Direction.RIGHT:    160,
 }
 
 class Arrow(pygame.sprite.Sprite):
@@ -66,10 +66,10 @@ class DuckDuckRevolution(BaseState):
         self.font = pygame.font.SysFont('serif.ttf', 50)
         self.counter = 0
         self.score = 0
-        self.keys_counter = 1
-        self.title = self.font.render(
-            "Viva la duck duck revolution", True, pygame.Color("white"))
-        self.title_rect = self.title.get_rect(center=(300, 50))
+        self.keys_counter = 0
+        #self.title = self.font.render(
+        #    "Viva la duck duck revolution", True, pygame.Color("white"))
+        #self.title_rect = self.title.get_rect(center=(300, 50))
         self.next_state = "OVERWORLD"
         self.up_arrow_currently_down = False
         self.left_arrow_currently_down = False
@@ -77,6 +77,18 @@ class DuckDuckRevolution(BaseState):
         self.right_arrow_currently_down = False
         self.strike_line = StrikeLine(pygame.Rect(self.screen_rect.center[0], 0, 2, 800))
         self.arrow_queue = [Arrow(Direction.LEFT, 0, heights[Direction.LEFT]), Arrow(Direction.RIGHT, 200, heights[Direction.RIGHT])]
+        self.my_font = pygame.font.Font("states/data/PixeloidSansBold.ttf", 40)
+        self.receptor_right = pygame.transform.scale(pygame.image.load("./noteskin/receptor_right.png"), (100,100))
+        self.receptor_left = pygame.transform.scale(pygame.image.load("./noteskin/receptor_left.png"), (100,100))
+        self.receptor_down = pygame.transform.scale(pygame.image.load("./noteskin/receptor_down.png"), (100,100))
+        self.receptor_up = pygame.transform.scale(pygame.image.load("./noteskin/receptor_up.png"), (100,100))
+        self.arrow_imgs = {
+            Direction.UP:       pygame.transform.scale(pygame.image.load("./noteskin/redarrow_up.png"), (100,100)),
+            Direction.LEFT:     pygame.transform.scale(pygame.image.load("./noteskin/redarrow_left.png"), (100,100)),
+            Direction.DOWN:     pygame.transform.scale(pygame.image.load("./noteskin/redarrow_down.png"), (100,100)),
+            Direction.RIGHT:    pygame.transform.scale(pygame.image.load("./noteskin/redarrow_right.png"), (100,100)),
+        }
+
 
     def get_event(self, event):
         if event.type == pygame.QUIT:
@@ -109,13 +121,23 @@ class DuckDuckRevolution(BaseState):
                 self.right_arrow_currently_down = False
     def draw(self, surface):
         surface.blit(bg, (0, 0))
-        surface.blit(self.title, self.title_rect)
+        #surface.blit(self.title, self.title_rect)
         color = (0, 0, 0)
         pygame.draw.rect(surface, color, self.strike_line)
-        surface.blit(self.font.render(str(self.score), True, (0,0,250)), (500, 100))
+        # draw receptors
+        surface.blit(self.receptor_right, self.receptor_right.get_rect(topleft=(self.screen_rect.center[0]-50, heights[Direction.RIGHT]-44)))
+        surface.blit(self.receptor_left, self.receptor_left.get_rect(topleft=(self.screen_rect.center[0]-50, heights[Direction.LEFT]-44)))
+        surface.blit(self.receptor_up, self.receptor_up.get_rect(topleft=(self.screen_rect.center[0]-50, heights[Direction.UP]-44)))
+        surface.blit(self.receptor_down, self.receptor_down.get_rect(topleft=(self.screen_rect.center[0]-50, heights[Direction.DOWN]-44)))
+
+        surface.blit(self.my_font.render("Score: " + str(self.score), True, pygame.Color("white")), (1000, 50))
         # pygame.draw.polygon(surface, color, list(map(lambda x: (x[0], x[1]+620), polygons[Direction.RIGHT])))
         for arrow in self.arrow_queue:
-            pygame.draw.polygon(surface, colours[arrow.direction],  list(map(lambda x: (x[0] + arrow.centre_x, x[1]+heights[arrow.direction]), polygons[arrow.direction])))
+            arrow_to_draw = self.arrow_imgs[arrow.direction]
+            #hello = list(map(lambda x: (x[0] + arrow.centre_x, x[1]+heights[arrow.direction]), polygons[arrow.direction]))
+            surface.blit(arrow_to_draw, arrow_to_draw.get_rect(center=(arrow.centre_x, heights[arrow.direction])))
+            
+            #pygame.draw.polygon(surface, colours[arrow.direction],  list(map(lambda x: (x[0] + arrow.centre_x, x[1]+heights[arrow.direction]), polygons[arrow.direction])))
 
     def update(self, dt):
         if pygame.time.get_ticks() % 200 == 0:
@@ -124,11 +146,9 @@ class DuckDuckRevolution(BaseState):
         for x in self.arrow_queue:
             x.update_x()
             x.update_x()
+            x.update_x()
         self.arrow_queue = list(filter(lambda x: x.centre_x < 1400 and not(x.checked), self.arrow_queue))
         blocks_hit_list = pygame.sprite.spritecollide(self.strike_line, self.arrow_queue, False)
-        if len(blocks_hit_list) > 0:
-            #print(blocks_hit_list)
-            pass
         #print(self.keys_counter)
         if self.keys_counter == 1:
             for arrow in blocks_hit_list:

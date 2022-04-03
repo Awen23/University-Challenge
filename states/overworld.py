@@ -4,8 +4,6 @@ from .base import BaseState
 class Overworld(BaseState):
     def __init__(self):
         super(Overworld, self).__init__()
-        self.title = self.font.render("This is the overworld!", True, pygame.Color("white"))
-        self.title_rect = self.title.get_rect(center=(640, 260))
         self.time_active = 0
         # Background
         self.bg_img = pygame.image.load("./overworld.png")
@@ -16,27 +14,28 @@ class Overworld(BaseState):
         self.character_img_right = pygame.transform.scale(pygame.image.load("./duck/duck_right.png"), (50, 35))
         self.character_img_up = pygame.transform.scale(pygame.image.load("./duck/duck_up.png"), (35, 50))
         self.character_img = self.character_img_down
-        self.character_rect = self.character_img.get_rect(topleft=(0,0))
+        self.character_rect = self.character_img.get_rect(center=(640,130))
         # Location icons
         self.locations = {}
         self.initialise_locations()
     
+    def startup(self, persistent):
+        self.character_rect = self.character_img.get_rect(topleft=(0,0))
+
+    
     def initialise_locations(self):
         # Make this better..
         cc = pygame.transform.scale(pygame.image.load("./1w_facade.png"), (200, 100))
-        self.locations["COURSEWORK CRUNCH"] = (cc, cc.get_rect(center=(320, 240)))
+        self.locations["COURSEWORK CRUNCH GAME START"] = (cc, cc.get_rect(center=(320, 240)))
 
         mdm = pygame.transform.scale(pygame.image.load("./fresh_facade.png"), (120, 120))
-        self.locations["MEAL DEAL MANIA"] = (mdm, mdm.get_rect(center=(260,560)))
-
-        # self.locations["COURSEWORK CRUNCH"] = pygame.Rect((0,0), (50,50))
-        # self.locations["COURSEWORK CRUNCH"].center = (540, 360)
+        self.locations["MEAL DEAL MANIA GAME START"] = (mdm, mdm.get_rect(center=(260,500)))
 
         ss =  pygame.transform.scale(pygame.image.load("states/data/library.png"), (120, 120))
         self.locations["SHELF SEARCH"] = (ss, ss.get_rect(center=(940, 320)))
 
         ddr = pygame.transform.scale(pygame.image.load("./su_facade.png"), (120, 120))
-        self.locations["DUCK DUCK REVOLUTION"] = (ddr, ddr.get_rect(center=(1060, 440)))
+        self.locations["DUCK DUCK REVOLUTION GAME START"] = (ddr, ddr.get_rect(center=(1060, 440)))
 
         tt = pygame.transform.scale(pygame.image.load("./bus_facade.png"), (120, 120))
         self.locations["TICKETS THANKS GAME START"] = (tt, tt.get_rect(center=(640, 640)))
@@ -81,7 +80,6 @@ class Overworld(BaseState):
 
     def draw(self, surface):
         surface.blit(self.bg_img, self.bg_img.get_rect())
-        surface.blit(self.title, self.title_rect)
         # Draw character rect
         surface.blit(self.character_img, self.character_rect)
         # Draw locations rects
