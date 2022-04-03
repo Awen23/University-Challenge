@@ -90,7 +90,7 @@ class TicketsThanks(BaseState):
         text_surface = self.my_font.render("Score: " + str(self.score), True, pygame.Color("white"))
         surface.blit(text_surface, (self.score_rect.x, self.score_rect.y))
 
-        text_surface = self.my_font.render("Time: " + str(20 - round((time.time() - self.start_time))), True, pygame.Color("white"))
+        text_surface = self.my_font.render("Time: " + str(30 - round((self.start_time - time.time()))), True, pygame.Color("white"))
         surface.blit(text_surface, (self.time_rect.x, self.score_rect.y))
 
         pygame.draw.rect(surface, (180,180,0), self.word_box)
