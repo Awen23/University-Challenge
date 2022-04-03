@@ -35,6 +35,9 @@ class Overworld(BaseState):
         ddr = pygame.transform.scale(pygame.image.load("./su_facade.png"), (120, 120))
         self.locations["DUCK DUCK REVOLUTION"] = (ddr, ddr.get_rect(center=(1060, 440)))
 
+        tt = pygame.transform.scale(pygame.image.load("./bus_facade.png"), (120, 120))
+        self.locations["TICKETS THANKS GAME START"] = (tt, tt.get_rect(center=(640, 640)))
+
 
     # Runs continuously, it's the loop
     def update(self, dt):
