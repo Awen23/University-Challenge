@@ -5,6 +5,9 @@ from states.meal_deal_mania import MealDealMania
 from states.shelf_search import ShelfSearch
 
 from states.overworld import Overworld
+from states.coursework_crunch import CourseworkCrunch
+from states.tickets_thanks import TicketsThanks
+from states.game_start import GameStart
 from states.main_menu import MainMenu
 # minigame states here
 from game import Game
@@ -18,7 +21,10 @@ states = {
     # coursework crunch
     "MEAL DEAL MANIA": MealDealMania(),
     "SHELF SEARCH": ShelfSearch(),
-    "DUCK DUCK REVOLUTION": DuckDuckRevolution()
+    "DUCK DUCK REVOLUTION": DuckDuckRevolution(),
+    "COURSEWORK CRUNCH": CourseworkCrunch(),
+    "TICKETS THANKS": TicketsThanks(),
+    "GAME START": GameStart("Tickets Thanks!", "states/data/bus_stop.png", "states/data/busboi.png", "states/data/tickets_thanks.txt", "TICKETS THANKS")
 }
 
 game = Game(screen, states, "MAIN MENU")
