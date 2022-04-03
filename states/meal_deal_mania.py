@@ -59,11 +59,15 @@ class MealDealMania(BaseState):
         # self.score_text = self.font.render("Score: " + str(self.score), True, pygame.Color("white"))
         # self.score_rect = self.score_text.get_rect(topleft = (1000, 0))
 
-        self.score_rect = pygame.Rect(460, 7, 50, 30)
+        self.score_rect = pygame.Rect(1000, 7, 50, 30)
         self.time_rect = pygame.Rect(660, 7, 50, 30)
 
         self.score_final = pygame.Surface((680,420), pygame.SRCALPHA)   # per-pixel alpha
         self.score_final.fill((0,0,0,200))
+        self.button_box = pygame.Rect(535,400,210,90)
+        self.next_button = pygame.image.load("states/data/nextbutton.png")
+        self.next_button_over = pygame.image.load("states/data/nextbutton_highlighted.png")
+        self.ending = False
 
         self.round = 0
         self.my_font = pygame.font.Font("states/data/PixeloidSansBold.ttf", 40)
