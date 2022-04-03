@@ -4,13 +4,14 @@ from .base import BaseState
 import random
 from operator import attrgetter
 import copy
+import time
 
 class MealDealMania(BaseState):
     def __init__(self):
         super(MealDealMania, self).__init__()
         self.title = self.font.render("Meal deal maniaaaa", True, pygame.Color("white"))
         self.title_rect = self.title.get_rect(center=self.screen_rect.center)
-        self.next_state = "OVERWORLD"
+        self.next_state = "OVERWORLD" # SHOULD BE END SCREEN / SCORE SCREEN
         self.score = 0
 
         # Background image
@@ -34,10 +35,13 @@ class MealDealMania(BaseState):
         self.last_moused_prod = self.products[0][0]
 
         # Silhouettes
-        self.silhouette = pygame.image.load("./fresh/silhouette.png")
+        self.silhouette = pygame.transform.scale(pygame.image.load("./fresh/silhouette.png"), (360, 900))
         self.silhouette_rects = []
-        self.silhouette_rects.append(self.silhouette.get_rect(topleft=(-500, 400)))
-        self.silhouette_rects.append(self.silhouette.get_rect(topleft=(2000, 200)))
+        self.silhouette_rects.append( [self.silhouette.get_rect(topleft=(0, 200)), 1])
+        self.silhouette_rects.append( [self.silhouette.get_rect(topleft=(1280, 100)), -1])
+        self.silhouette_rects.append( [self.silhouette.get_rect(topleft=(300, 250)), 1])
+        self.silhouette_rects.append( [self.silhouette.get_rect(topleft=(940, 150)), -1])
+        self.silhouette_rects.append( [self.silhouette.get_rect(topleft=(700, 150)), 1])
 
         # Three items to make the meal deal
         self.inventory = []
@@ -47,6 +51,9 @@ class MealDealMania(BaseState):
         self.score_rect = self.score_text.get_rect(topleft = (1000, 0))
 
         self.round = 0
+        self.my_font = pygame.font.Font("states/data/PixeloidSansBold.ttf", 40)
+
+        self.start_time = False
 
     
     def has_duplicates(self, seq):
@@ -117,6 +124,11 @@ class MealDealMania(BaseState):
                 self.products[0][i].is_in_meal_deal = self.product_selection[i][2]
 
     def update(self, dt):
+        if not self.start_time:
+            self.start_time = time.time()
+        else:
+            if (time.time() - self.start_time > 30):
+                self.done = True
         pass
 
     def get_event(self, event):
@@ -171,12 +183,12 @@ class MealDealMania(BaseState):
 
     def draw_silhouettes(self, surface):
         for sil in self.silhouette_rects:
-            surface.blit(self.silhouette, sil)
-            if sil.right < 0:
-                print("hi")
-                sil.move_ip(5, 0)
-            elif sil.left > 1280:
-                sil.move_ip(-5, 0)
+            surface.blit(self.silhouette, sil[0])
+            if sil[0].right < 0:
+                sil[1] = sil[1]*-1
+            elif sil[0].left > 1280:
+                sil[1] = sil[1]*-1
+            sil[0].move_ip(sil[1]*20, 0)
         
     
     def draw(self, surface):
@@ -189,7 +201,7 @@ class MealDealMania(BaseState):
         # self.silhouette1_rect.move_ip(5, 0)
         # self.silhouette2_rect.move_ip(-5, 0)
 
-        surface.blit(self.font.render("Score: " + str(self.score), True, pygame.Color("white")), self.score_rect) # score
+        surface.blit(self.my_font.render("Score: " + str(self.score), True, pygame.Color("white")), self.score_rect) # score
 
 
 class Product():
