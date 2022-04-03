@@ -56,8 +56,8 @@ class MealDealMania(BaseState):
         self.inventory = []
         # Player score
         self.score = 0
-       # self.score_text = self.font.render("Score: " + str(self.score), True, pygame.Color("white"))
-        #self.score_rect = self.score_text.get_rect(topleft = (1000, 0))
+        self.score_text = self.font.render("Score: " + str(self.score), True, pygame.Color("white"))
+        self.score_rect = self.score_text.get_rect(topleft = (1000, 0))
 
         self.score_rect = pygame.Rect(460, 7, 50, 30)
         self.time_rect = pygame.Rect(660, 7, 50, 30)
