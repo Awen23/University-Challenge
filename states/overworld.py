@@ -32,7 +32,7 @@ class Overworld(BaseState):
         # self.locations["COURSEWORK CRUNCH"] = pygame.Rect((0,0), (50,50))
         # self.locations["COURSEWORK CRUNCH"].center = (540, 360)
 
-        ss =  pygame.transform.scale(pygame.image.load("./library_facade.png"), (120, 120))
+        ss =  pygame.transform.scale(pygame.image.load("states/data/library.png"), (120, 120))
         self.locations["SHELF SEARCH"] = (ss, ss.get_rect(center=(940, 320)))
 
         ddr = pygame.transform.scale(pygame.image.load("./su_facade.png"), (120, 120))

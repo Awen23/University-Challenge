@@ -9,11 +9,11 @@ pygame.font.init()
 class CourseworkCrunch(BaseState):
     def __init__(self):
         super(CourseworkCrunch, self).__init__()
-        self.start_time = time.time()
+        self.start_time = False
         self.title = self.font.render("Coursework Crunch", True, pygame.Color("white"))
         self.title_rect = self.title.get_rect(center=self.screen_rect.center)
         self.next_state = "OVERWORLD"
-        self.ended = False
+        self.ending = False
         self.bg = pygame.image.load("states/data/computer.png")
         self.run_pic = pygame.image.load('states/data/run.png')
         self.run_over = self.run_pic.copy()
@@ -21,12 +21,14 @@ class CourseworkCrunch(BaseState):
         alpha = 128
         self.run_over.fill((255, 255, 255, alpha), None, pygame.BLEND_RGBA_MULT)
         self.questions = open("states/data/stack_overflow.txt", "r").read().split("\n")
-        self.snippets = open("states/data/text.txt", "r").read().split("\n") #CHANGE TO CODE AND @@
+        self.snippets = open("states/data/code.txt", "r").read().split("@@") 
         #print(pygame.font.get_fonts())
         self.random_index = random.randint(0, len(self.questions) - 1)
         self.current_question = self.questions[self.random_index]
         self.current_snippet = self.snippets[self.random_index]
         self.my_font = pygame.font.Font("states/data/PixeloidSans.ttf", 12)
+        self.my_big_font = pygame.font.Font("states/data/PixeloidSansBold.ttf", 40)
+
         self.input_rect = pygame.Rect(701, 115, 475, 333)
         self.user_text = ''
         self.pressed_c = False
@@ -44,56 +46,72 @@ class CourseworkCrunch(BaseState):
         self.score = 0
         self.last_question = False
 
+        self.score_final = pygame.Surface((680,420), pygame.SRCALPHA)   # per-pixel alpha
+        self.score_final.fill((0,0,0,200))
+        #self.score_final = pygame.Rect(300,150,680,420)
+        self.button_box = pygame.Rect(535,400,210,90)
+        self.next_button = pygame.image.load("states/data/nextbutton.png")
+        self.next_button_over = pygame.image.load("states/data/nextbutton_highlighted.png")
+        self.ending = False
+
 
     def get_event(self, event):
         if event.type == pygame.QUIT:
             self.quit = True
+        if not self.ending:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.run_button.collidepoint(event.pos):
+                    self.errored = True
+                    self.last_question = self.current_question
+                    self.random_index = random.randint(0, len(self.questions))
+                    self.current_question = self.questions[self.random_index]
+                    user_list = list(filter(None, re.split("[ \[\]\(\)|']", self.user_text)))
+                    code_list = list(filter(None, re.split("[ \[\]\(\)|']", self.current_snippet)))
+                    print("USER LIST:")
+                    print(user_list)
+                    print("CODE LIST:")
+                    print(code_list)
+                    for inp, aim in zip(user_list, code_list):
+                        if inp.lower() == aim.lower():
+                            self.score += 1
+                        else:
+                            print("DIFF " + inp.lower() + " " + aim.lower())
+                
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.run_button.collidepoint(event.pos):
-                self.errored = True
-                self.last_question = self.current_question
-                self.random_index = random.randint(0, len(self.questions))
-                self.current_question = self.questions[self.random_index]
-                user_list = list(filter(None, re.split("[ \[\]\(\)|']", self.user_text)))
-                code_list = list(filter(None, re.split("[ \[\]\(\)|']", self.current_snippet)))
-                print("USER LIST:")
-                print(user_list)
-                print("CODE LIST:")
-                print(code_list)
-                for inp, aim in zip(user_list, code_list):
-                    if inp.lower() == aim.lower():
-                        self.score += 1
-                    else:
-                        print("DIFF " + inp.lower() + " " + aim.lower())
-            
+            if event.type == pygame.KEYDOWN:
+                if self.errored:
+                    keys = pygame.key.get_pressed()
 
-        if event.type == pygame.KEYDOWN:
-            if self.errored:
-                keys = pygame.key.get_pressed()
+                    if (keys[pygame.K_RCTRL] or keys[pygame.K_LCTRL]) and keys[pygame.K_c]:
+                        self.pressed_c = True
 
-                if (keys[pygame.K_RCTRL] or keys[pygame.K_LCTRL]) and keys[pygame.K_c]:
-                    self.pressed_c = True
-
-                if (keys[pygame.K_RCTRL] or keys[pygame.K_LCTRL]) and keys[pygame.K_v] and self.pressed_c:
-                    self.pressed_c = False
-                    self.errored = False
-                    self.current_snippet = self.snippets[self.random_index]
-                    self.user_text = ''
-            else:
-                if event.key == pygame.K_BACKSPACE:
-                    self.user_text = self.user_text[:-1]
-                elif event.key == pygame.K_RETURN:
-                    self.user_text += "\n"
-                elif event.key == pygame.K_TAB:
-                    self.user_text += "   "
+                    if (keys[pygame.K_RCTRL] or keys[pygame.K_LCTRL]) and keys[pygame.K_v] and self.pressed_c:
+                        self.pressed_c = False
+                        self.errored = False
+                        self.current_snippet = self.snippets[self.random_index]
+                        self.user_text = ''
                 else:
-                    self.user_text += event.unicode
+                    if event.key == pygame.K_BACKSPACE:
+                        self.user_text = self.user_text[:-1]
+                    elif event.key == pygame.K_RETURN:
+                        self.user_text += "\n"
+                    elif event.key == pygame.K_TAB:
+                        self.user_text += "   "
+                    else:
+                        self.user_text += event.unicode
+        else:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.button_box.collidepoint(event.pos):
+                    print("DONE")
+                    self.done = True
     
     def draw(self, surface):
-        if (time.time() - self.start_time) > 6000:
-            print("here")
-            self.ended = True
+        if not self.start_time:
+            self.start_time = time.time()
+        else:
+            if (time.time() - self.start_time) > 30:
+                self.ending = True
+
         surface.blit(self.bg, (0, 0))
         text_surface = self.my_font.render("Score: " + str(self.score), True, pygame.Color("white"))
         surface.blit(text_surface, (self.score_rect.x, self.score_rect.y))
@@ -160,4 +178,25 @@ class CourseworkCrunch(BaseState):
         else:
             surface.blit(self.run_pic, self.run_pic.get_rect(center = self.run_button.center))
         
+        if self.ending:
+            #pygame.draw.rect(surface, (0,0,0), self.score_final)
+            surface.blit(self.score_final, (300, 150))
+            text_surface = self.my_big_font.render("Score: " + str(self.score), True, (255,255,255))
+            size = self.my_big_font.size("Score: " + str(self.score))
+            surface.blit(text_surface, (640-round(size[0]/2), 250))
+
+            b_len_x = 210
+            b_len_y = 90
+            mos_x, mos_y = pygame.mouse.get_pos()
+            if mos_x>self.button_box.x and (mos_x<self.button_box.x+b_len_x):
+                x_inside = True
+            else: x_inside = False
+            if mos_y>self.button_box.y and (mos_y<self.button_box.y+b_len_y):
+                y_inside = True
+            else: y_inside = False
+            if x_inside and y_inside:
+                #Mouse is hovering over button
+                surface.blit(self.next_button_over, self.next_button_over.get_rect(center = self.button_box.center))
+            else:
+                surface.blit(self.next_button, self.next_button.get_rect(center = self.button_box.center))
 
