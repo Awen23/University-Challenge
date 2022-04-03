@@ -67,7 +67,6 @@ class TicketsThanks(BaseState):
         if event.type == pygame.QUIT:
             self.quit = True
 
-
         if not self.ending:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.yes_button.collidepoint(event.pos):

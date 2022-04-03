@@ -8,6 +8,11 @@ class Overworld(BaseState):
         # Background
         self.bg_img = pygame.image.load("./overworld.png")
 
+        # Title
+        self.my_font = pygame.font.Font("states/data/PixeloidSansBold.ttf", 40)
+        self.title = self.font.render("Overworld", True, pygame.Color("white"))
+        self.title_rect = self.title.get_rect(center=(self.screen_rect.center[0]-90, 20))
+
         # Character
         self.character_img_down = pygame.transform.scale(pygame.image.load("./duck/duck_down.png"), (35, 50))
         self.character_img_left = pygame.transform.scale(pygame.image.load("./duck/duck_left.png"), (50, 35))
@@ -20,7 +25,7 @@ class Overworld(BaseState):
         self.initialise_locations()
     
     def startup(self, persistent):
-        self.character_rect = self.character_img.get_rect(topleft=(0,0))
+        self.character_rect = self.character_img.get_rect(center=(640,130))
 
     
     def initialise_locations(self):
@@ -80,6 +85,8 @@ class Overworld(BaseState):
 
     def draw(self, surface):
         surface.blit(self.bg_img, self.bg_img.get_rect())
+        # Text
+        surface.blit(self.my_font.render("Overworld", True, pygame.Color("white")), self.title_rect)
         # Draw character rect
         surface.blit(self.character_img, self.character_rect)
         # Draw locations rects
